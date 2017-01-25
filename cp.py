@@ -52,28 +52,29 @@ def write(sour, file):
     return True
 
 
-def tree(source, destination):
-    s = source.rstrip('/')
+def tree(source2, destination):
+    s = source2.rstrip('/')
     new_sour = os.path.basename(s)
     dirs = []
     files = []
     for root, _, file in os.walk(s):
         top = destination + '/' + new_sour + root.split(s)[1]
-        dirs.append(top)
+        dirs.append((root,top))
         if file:
             for f in file:
                 files.append((root + '/' + f, top + '/' + f))
     return dirs, files
 
 
-def preserve(s, file):
-    os.chmod(file, s.st_mode)
-    os.chown(file, s.st_uid, s.st_gid)
-    os.utime(file, (s.st_atime, s.st_mtime))
+def preserve(s, det):
+    s2 = os.stat(s)
+    os.chmod(det, s2.st_mode)
+    os.chown(det, s2.st_uid, s2.st_gid)
+    os.utime(det, (s2.st_atime, s2.st_mtime))
     return True
 
 
-if __name__ == '__main__':
+def main():
     op = option()
     if not op.source or not op.destination:
         print('not source or not destination....error')
@@ -88,18 +89,24 @@ if __name__ == '__main__':
             dst = op.destination + '/' + os.path.basename(op.source)
             write_file(dst)
         if op.preserve:
-            source_stat = os.stat(op.source)
-            preserve(source_stat, dst)
+            preserve(op.source, dst)
     elif op.r and os.path.isdir(op.source):
         mkdir = partial(os.makedirs, mode=511, exist_ok=True)
         dirs, files = tree(op.source, op.destination)
         for d in dirs:
-            if not os.path.exists(d):
-                mkdir(d)
+            if not os.path.exists(d[1]):
+                mkdir(d[1])
+            if op.preserve:
+                preserve(d[0],d[1])
         for f in files:
             s = read(f[0])
             write(s, f[1])
+            if op.preserve:
+                preserve(f[0],f[1])
 
     else:
         print('{} is a director please use -r or --recursive'.format(op.source))
         sys.exit()
+
+if __name__== '__main__':
+    main()
