@@ -92,7 +92,6 @@ def option_stat(opt, y):
         else:
             total=0
             for l in os.listdir(y):
-                print(l)
                 total += os.stat(y+'/'+l).st_size
             print('total: %s'% total)
             for i in os.listdir(y):
