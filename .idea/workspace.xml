@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b9a64903-94c2-4645-839c-c65542a2abe8" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/find.py" afterPath="$PROJECT_DIR$/find.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ls.py" afterPath="$PROJECT_DIR$/ls.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nn.ipynb" afterPath="$PROJECT_DIR$/nn.ipynb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cp.py" afterPath="$PROJECT_DIR$/cp.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/new/me.ini" afterPath="$PROJECT_DIR$/new/me.ini" />
     </list>
     <ignored path="Py.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -53,58 +51,16 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="cat.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cat.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="336">
-              <caret line="16" column="39" selection-start-line="16" selection-start-column="29" selection-end-line="16" selection-end-column="39" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="find.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/find.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-74">
-              <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#29#0" expanded="true" />
-                <element signature="e#80#2157#0" expanded="false" />
-                <element signature="e#2183#2316#0" expanded="false" />
-                <element signature="e#2350#2497#0" expanded="false" />
-                <element signature="e#2527#2818#0" expanded="false" />
-                <element signature="e#2855#3300#0" expanded="false" />
-                <element signature="e#3335#3896#0" expanded="false" />
-                <element signature="e#3927#4037#0" expanded="false" />
-                <element signature="e#4075#4310#0" expanded="false" />
-                <element signature="e#4340#4963#0" expanded="false" />
-                <element signature="e#4987#6148#0" expanded="false" />
-                <element signature="e#6167#6405#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="cp.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cp.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="567">
-              <caret line="77" column="16" selection-start-line="77" selection-start-column="16" selection-end-line="77" selection-end-column="16" />
-              <folding>
-                <element signature="e#75#912#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ls.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ls.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="21">
-              <caret line="93" column="35" selection-start-line="93" selection-start-column="35" selection-end-line="93" selection-end-column="35" />
+            <state relative-caret-position="460">
+              <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
               <folding>
-                <element signature="e#89#910#0" expanded="false" />
+                <element signature="e#932#1767#0" expanded="false" />
+                <element signature="e#1790#2102#0" expanded="false" />
+                <element signature="e#2134#2926#0" expanded="false" />
+                <element signature="e#2945#3243#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -157,10 +113,10 @@
         <option value="$PROJECT_DIR$/nn/client.py" />
         <option value="$PROJECT_DIR$/new/del.py" />
         <option value="$PROJECT_DIR$/url.py" />
-        <option value="$PROJECT_DIR$/cp.py" />
         <option value="$PROJECT_DIR$/nn/clockdate.py" />
         <option value="$PROJECT_DIR$/ls.py" />
         <option value="$PROJECT_DIR$/find.py" />
+        <option value="$PROJECT_DIR$/cp.py" />
       </list>
     </option>
   </component>
@@ -171,10 +127,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="605" />
-    <option name="y" value="49" />
-    <option name="width" value="1600" />
-    <option name="height" value="852" />
+    <option name="x" value="731" />
+    <option name="y" value="154" />
+    <option name="width" value="1680" />
+    <option name="height" value="1006" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -572,7 +528,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="605" y="49" width="1600" height="852" extended-state="0" />
+    <frame x="731" y="154" width="1680" height="1006" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.42939666" sideWeight="0.49421486" order="0" side_tool="false" content_ui="combo" />
@@ -857,13 +813,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/app.py" />
     <entry file="file://$PROJECT_DIR$/nn/client.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="115">
@@ -879,40 +829,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cat.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="16" column="39" selection-start-line="16" selection-start-column="29" selection-end-line="16" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="21">
-          <caret line="93" column="35" selection-start-line="93" selection-start-column="35" selection-end-line="93" selection-end-column="35" />
-          <folding>
-            <element signature="e#89#910#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cp.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="567">
-          <caret line="77" column="16" selection-start-line="77" selection-start-column="16" selection-end-line="77" selection-end-column="16" />
-          <folding>
-            <element signature="e#75#912#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/find.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-74">
-          <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
+        <state relative-caret-position="217">
+          <caret line="89" column="0" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
           <folding>
-            <element signature="e#0#29#0" expanded="true" />
+            <element signature="e#0#29#0" expanded="false" />
             <element signature="e#80#2157#0" expanded="false" />
             <element signature="e#2183#2316#0" expanded="false" />
             <element signature="e#2350#2497#0" expanded="false" />
@@ -924,6 +846,41 @@
             <element signature="e#4340#4963#0" expanded="false" />
             <element signature="e#4987#6148#0" expanded="false" />
             <element signature="e#6167#6405#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cat.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="16" column="39" selection-start-line="16" selection-start-column="29" selection-end-line="16" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cp.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="61">
+          <caret line="78" column="17" selection-start-line="78" selection-start-column="17" selection-end-line="78" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+            <element signature="e#75#912#0" expanded="false" />
+            <element signature="e#935#985#0" expanded="false" />
+            <element signature="e#1015#1569#0" expanded="false" />
+            <element signature="e#2054#2201#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="460">
+          <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+          <folding>
+            <element signature="e#932#1767#0" expanded="false" />
+            <element signature="e#1790#2102#0" expanded="false" />
+            <element signature="e#2134#2926#0" expanded="false" />
+            <element signature="e#2945#3243#0" expanded="false" />
           </folding>
         </state>
       </provider>

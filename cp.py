@@ -54,12 +54,13 @@ def write(sour, file):
 
 def tree(source2, destination):
     s = source2.rstrip('/')
+    d = destination.rstrip('/')
     new_sour = os.path.basename(s)
     dirs = []
     files = []
     for root, _, file in os.walk(s):
-        top = destination + '/' + new_sour + root.split(s)[1]
-        dirs.append((root,top))
+        top = d + '/' + new_sour + root.split(s)[1] if os.path.exists(d) else d + root.split(s)[1]
+        dirs.append((root, top))
         if file:
             for f in file:
                 files.append((root + '/' + f, top + '/' + f))
@@ -93,20 +94,21 @@ def main():
     elif op.r and os.path.isdir(op.source):
         mkdir = partial(os.makedirs, mode=511, exist_ok=True)
         dirs, files = tree(op.source, op.destination)
+        print(dirs)
         for d in dirs:
             if not os.path.exists(d[1]):
                 mkdir(d[1])
             if op.preserve:
-                preserve(d[0],d[1])
+                preserve(d[0], d[1])
         for f in files:
             s = read(f[0])
             write(s, f[1])
             if op.preserve:
-                preserve(f[0],f[1])
-
+                preserve(f[0], f[1])
     else:
         print('{} is a director please use -r or --recursive'.format(op.source))
         sys.exit()
 
-if __name__== '__main__':
+
+if __name__ == '__main__':
     main()
