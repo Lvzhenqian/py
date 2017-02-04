@@ -1,6 +1,5 @@
 import argparse, os, stat
 import datetime
-from functools import partial
 
 
 def opt():
@@ -27,7 +26,7 @@ def opt():
     return opt.parse_args()
 
 
-def lsmore(x):
+def more(x):
     uid = {}
     gid = {}
     with open('/etc/passwd') as f:
@@ -46,11 +45,10 @@ def lsmore(x):
     st = os.stat(x)
     time = datetime.datetime.fromtimestamp(st.st_ctime)
     lst[0] = stat.filemode(st.st_mode)
-    if os.path.isdir(x):
-        lst[1] = str(len(os.listdir(x)))
+    lst[1] = '{:>2}'.format(str(len([v for v in os.listdir(x) if v[0] != '.']) if os.path.isdir(x) else 1))
     lst[2] = uid[str(st.st_uid)]
     lst[3] = gid[str(st.st_gid)]
-    lst[4] = str(st.st_size)
+    lst[4] = '{:>6}'.format(str(st.st_size))
     lst[5] = time.strftime('%b')
     lst[6] = time.strftime('%d')
     lst[7] = time.strftime('%H:%M')
@@ -58,7 +56,9 @@ def lsmore(x):
     return ' '.join(lst)
 
 
-def alllist(x):
+def show_all(x):
+    if os.path.isfile(x):
+        print(x)
     f = ['.', '..']
     if x == '.':
         f.extend(os.listdir('.'))
@@ -72,53 +72,64 @@ def alllist(x):
         print(x)
 
 
-def option_stat(opt, y):
-    if not opt.a and not opt.h and not opt.l:
-        if os.path.isfile(y):
-            print(y)
-        else:
-            for j in os.listdir(y):
-                if j[0] != '.':
-                    print(j, end='  ')
-            print()
-    elif opt.a:
-        if os.path.isfile(y):
-            print(y)
-        else:
-            alllist(y)
-    elif opt.l:
-        if os.path.isfile(y):
-            print(lsmore(y))
-        else:
-            total=0
-            for l in os.listdir(y):
-                total += os.stat(y+'/'+l).st_size
-            print('total: %s'% total)
-            for i in os.listdir(y):
-                print(lsmore(i))
-    elif opt.l and opt.h:
+def Show(x):
+    if os.path.isfile(x):
+        print(x)
+    else:
+        for i in os.listdir(x):
+            if i[0] != '.':
+                print(i, end='  ')
+        print()
+
+
+def _more(x):
+    o = opt()
+    if os.path.isfile(x):
+        print(more(x))
+    if o.a:
+        total = 4096 * 2
+        for l in os.listdir(x):
+            total += os.stat(x + '/' + l).st_size
+        print('total: %s' % (int(total // 1024)))
+        print(more('.'))
+        print(more('..'))
+        for i in os.listdir(x):
+            print(more(i))
+    elif o.h:
         pass
-    elif opt.a and opt.h:
-        if os.path.isfile(y):
-            print(y)
-        else:
-            alllist(y)
+    else:
+        total = 0
+        for l in os.listdir(x):
+            total += os.stat(x + '/' + l).st_size
+        print('total: %s' % int(total // 1024))
+        for i in os.listdir(x):
+            if i[0] != '.':
+                print(more(i))
+
+
+def option_stat(dest):
+    op = opt()
+    if not [v for v in vars(op).values() if v]:
+        Show(dest)
+    if op.l:
+        _more(dest)
+    elif op.a:
+        show_all(dest)
 
 
 def main():
     op = opt()
-    st = partial(option_stat, op)
     if not op.argvs:
-        st('.')
+        option_stat('.')
     else:
         if len(op.argvs) == 1:
             if op.argvs[0] == '.':
-                st('.')
+                option_stat('.')
             else:
-                st(op.argvs[0])
+                option_stat(op.argvs[0])
         else:
             for k in op.argvs:
-                st(k)
+                option_stat(k)
 
 
 if __name__ == '__main__':
