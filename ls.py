@@ -26,7 +26,7 @@ def opt():
     return opt.parse_args()
 
 
-def more(x):
+def more(x, h=False):
     uid = {}
     gid = {}
     with open('/etc/passwd') as f:
@@ -48,7 +48,19 @@ def more(x):
     lst[1] = '{:>2}'.format(str(len([v for v in os.listdir(x) if v[0] != '.']) if os.path.isdir(x) else 1))
     lst[2] = uid[str(st.st_uid)]
     lst[3] = gid[str(st.st_gid)]
-    lst[4] = '{:>6}'.format(str(st.st_size))
+    if h:
+        for n, i in enumerate([(1024 ** 3, 'G'), (1024 ** 2, 'M'), (1024, 'K'), (0, '')]):
+            if st.st_size > i[0]:
+                size = st.st_size / 1024 ** (3 - n)
+                if size > 100 and i[0] != 0:
+                    lst[4] = '{:>4.4}{}'.format('%d' % (size), i[1])
+                elif i[0] == 0:
+                    lst[4] = '{:>5}'.format(str(int(st.st_size)))
+                else:
+                    lst[4] = '{:>4.4}{}'.format('%0.2f' % (size), i[1])
+                break
+    else:
+        lst[4] = '{:>6}'.format(str(st.st_size))
     lst[5] = time.strftime('%b')
     lst[6] = time.strftime('%d')
     lst[7] = time.strftime('%H:%M')
@@ -86,7 +98,29 @@ def _more(x):
     o = opt()
     if os.path.isfile(x):
         print(more(x))
-    if o.a:
+
+    if o.h and o.a:
+        total = 0
+        for l in os.listdir(x):
+            total += os.stat(x + '/' + l).st_size
+        for n, p in enumerate([(1024 ** 3, 'G'), (1024 ** 2, 'M'), (1024, 'K'), (0, '')]):
+            if total > p[0]:
+                print('total: %s%s' % (int(total // 1024 ** (3 - n)), p[1]))
+                break
+        for i in os.listdir(x):
+            print(more(x + '/' + i, h=True))
+    elif o.h:
+        total = 0
+        for l in os.listdir(x):
+            total += os.stat(x + '/' + l).st_size
+        for n, p in enumerate([(1024 ** 3, 'G'), (1024 ** 2, 'M'), (1024, 'K'), (0, '')]):
+            if total > p[0]:
+                print('total: %s%s' % (int(total // 1024 ** (3 - n)), p[1]))
+                break
+        for i in os.listdir(x):
+            if os.path.basename(i)[0] != '.':
+                print(more(x + '/' + i, h=True))
+    elif o.a:
         total = 4096 * 2
         for l in os.listdir(x):
             total += os.stat(x + '/' + l).st_size
@@ -95,16 +129,14 @@ def _more(x):
         print(more('..'))
         for i in os.listdir(x):
             print(more(i))
-    elif o.h:
-        pass
     else:
         total = 0
         for l in os.listdir(x):
             total += os.stat(x + '/' + l).st_size
         print('total: %s' % int(total // 1024))
         for i in os.listdir(x):
-            if i[0] != '.':
-                print(more(i))
+            if os.path.basename(i)[0] != '.':
+                print(more(x + '/' + i))
 
 
 def option_stat(dest):
@@ -115,6 +147,13 @@ def option_stat(dest):
         _more(dest)
     elif op.a:
         show_all(dest)
+    elif op.h:
+        if os.path.isfile(dest):
+            print(dest)
+        else:
+            for k in os.listdir(dest):
+                print(k,end='  ')
+            print()
 
 
 def main():

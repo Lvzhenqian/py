@@ -1,15 +1,12 @@
 from urllib import request
 from urllib import parse
 
-url = 'http://192.168.19.20:1234/auth/login'
+url = 'http://121.10.141.71:8081/chart'
 head = {
-    'User-Agent':r'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) ',
-    'Referer':r'http://192.168.19.20:1234/',
-    'Content-Type':'application/json',
-    'Connection':'keep-alive'
+    'Content-Type':'application/x-www-form-urlencoded'
 }
 
-data = {'name':'root','password':'abcde'}
+data = {'endpoints[]':'113.107.161.24','counters[]':'df.bytes.total/stype=NTFS','graph_type':'h'}
 data = parse.urlencode(data).encode('ascii')
 req = request.Request(url,data)
 page = request.urlopen(req).read()
