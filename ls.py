@@ -70,7 +70,7 @@ def more(x, h=False):
                     lst[4] = '{:>4.4}{}'.format('%0.2f' % (size), i[1])
                 break
     else:
-        lst[4] = '{:>5}'.format(str(st.st_size))
+        lst[4] = '{:>6}'.format(str(st.st_size))
     lst[5] = time.strftime('%b')
     lst[6] = time.strftime('%d')
     lst[7] = time.strftime('%H:%M')
@@ -120,8 +120,8 @@ def _more(x):
             if total > p[0]:
                 print('total: %s%s' % (int(total // 1024 ** (3 - n)), p[1]))
                 break
-        print(more('.'))
-        print(more('..'))
+        print(more('.',h=True))
+        print(more('..',h=True))
         for i in os.listdir(x):
             print(more(x + '/' + i, h=True))
     elif o.h:
