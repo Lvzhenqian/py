@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b9a64903-94c2-4645-839c-c65542a2abe8" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ls.py" afterPath="$PROJECT_DIR$/ls.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/new/del.py" afterPath="$PROJECT_DIR$/new/del.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nn.ipynb" afterPath="$PROJECT_DIR$/nn.ipynb" />
     </list>
     <ignored path="Py.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -50,27 +52,33 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ls.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/ls.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="574">
-              <caret line="73" column="32" selection-start-line="73" selection-start-column="32" selection-end-line="73" selection-end-column="32" />
-              <folding>
-                <element signature="e#0#25#0" expanded="true" />
-                <element signature="e#59#880#0" expanded="false" />
-                <element signature="e#901#1131#0" expanded="false" />
-                <element signature="e#4986#5328#0" expanded="false" />
-                <element signature="e#5347#5647#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="cp.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cp.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1463">
               <caret line="78" column="17" selection-start-line="78" selection-start-column="17" selection-end-line="78" selection-end-column="17" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="del.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/new/del.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="247">
+              <caret line="13" column="22" selection-start-line="13" selection-start-column="22" selection-end-line="13" selection-end-column="22" />
+              <folding>
+                <element signature="e#37#50#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="clockdate.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/nn/clockdate.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1007">
+              <caret line="56" column="46" selection-start-line="56" selection-start-column="46" selection-end-line="56" selection-end-column="46" />
               <folding />
             </state>
           </provider>
@@ -121,12 +129,12 @@
         <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/leixing.py" />
         <option value="$PROJECT_DIR$/nn/client.py" />
-        <option value="$PROJECT_DIR$/new/del.py" />
         <option value="$PROJECT_DIR$/url.py" />
         <option value="$PROJECT_DIR$/nn/clockdate.py" />
         <option value="$PROJECT_DIR$/find.py" />
         <option value="$PROJECT_DIR$/cp.py" />
         <option value="$PROJECT_DIR$/ls.py" />
+        <option value="$PROJECT_DIR$/new/del.py" />
       </list>
     </option>
   </component>
@@ -137,7 +145,7 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="8" />
+    <option name="x" value="4" />
     <option name="y" value="-4" />
     <option name="width" value="1680" />
     <option name="height" value="1006" />
@@ -532,7 +540,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="8" y="-4" width="1680" height="1006" extended-state="0" />
+    <frame x="4" y="-4" width="1680" height="1006" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.42939666" sideWeight="0.49421486" order="0" side_tool="false" content_ui="combo" />
@@ -545,6 +553,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32847533" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20408164" sideWeight="0.5057851" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -802,13 +811,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/new/del.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="18" column="43" selection-start-line="18" selection-start-column="43" selection-end-line="18" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/url.py" />
     <entry file="file://$PROJECT_DIR$/du.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -823,13 +825,6 @@
         <state relative-caret-position="115">
           <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/nn/clockdate.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1018">
-          <caret line="56" column="46" selection-start-line="56" selection-start-column="46" selection-end-line="56" selection-end-column="46" />
         </state>
       </provider>
     </entry>
@@ -848,6 +843,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/ls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="574">
+          <caret line="73" column="32" selection-start-line="73" selection-start-column="32" selection-end-line="73" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/cp.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1463">
@@ -856,16 +858,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ls.py">
+    <entry file="file://$PROJECT_DIR$/nn/clockdate.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="574">
-          <caret line="73" column="32" selection-start-line="73" selection-start-column="32" selection-end-line="73" selection-end-column="32" />
+        <state relative-caret-position="1007">
+          <caret line="56" column="46" selection-start-line="56" selection-start-column="46" selection-end-line="56" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/new/del.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="13" column="22" selection-start-line="13" selection-start-column="22" selection-end-line="13" selection-end-column="22" />
           <folding>
-            <element signature="e#0#25#0" expanded="true" />
-            <element signature="e#59#880#0" expanded="false" />
-            <element signature="e#901#1131#0" expanded="false" />
-            <element signature="e#4986#5328#0" expanded="false" />
-            <element signature="e#5347#5647#0" expanded="false" />
+            <element signature="e#37#50#0" expanded="true" />
           </folding>
         </state>
       </provider>
