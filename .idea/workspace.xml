@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b9a64903-94c2-4645-839c-c65542a2abe8" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/new/del.py" afterPath="$PROJECT_DIR$/new/del.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nn.ipynb" afterPath="$PROJECT_DIR$/nn.ipynb" />
     </list>
     <ignored path="Py.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -52,34 +50,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="cp.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="cp.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cp.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1463">
-              <caret line="78" column="17" selection-start-line="78" selection-start-column="17" selection-end-line="78" selection-end-column="17" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="del.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/new/del.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="13" column="22" selection-start-line="13" selection-start-column="22" selection-end-line="13" selection-end-column="22" />
+            <state relative-caret-position="21">
+              <caret line="80" column="17" selection-start-line="80" selection-start-column="17" selection-end-line="80" selection-end-column="17" />
               <folding>
-                <element signature="e#37#50#0" expanded="true" />
+                <marker date="1486773721116" expanded="true" signature="1603:1636" ph="..." />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="clockdate.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/nn/clockdate.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1007">
-              <caret line="56" column="46" selection-start-line="56" selection-start-column="46" selection-end-line="56" selection-end-column="46" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -135,6 +113,8 @@
         <option value="$PROJECT_DIR$/cp.py" />
         <option value="$PROJECT_DIR$/ls.py" />
         <option value="$PROJECT_DIR$/new/del.py" />
+        <option value="$PROJECT_DIR$/new/loga.py" />
+        <option value="$PROJECT_DIR$/watch.py" />
       </list>
     </option>
   </component>
@@ -145,10 +125,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="4" />
-    <option name="y" value="-4" />
-    <option name="width" value="1680" />
-    <option name="height" value="1006" />
+    <option name="x" value="482" />
+    <option name="y" value="35" />
+    <option name="width" value="1048" />
+    <option name="height" value="823" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -540,7 +520,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="4" y="-4" width="1680" height="1006" extended-state="0" />
+    <frame x="482" y="35" width="1048" height="823" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.42939666" sideWeight="0.49421486" order="0" side_tool="false" content_ui="combo" />
@@ -639,8 +619,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/vva.py" />
-    <entry file="file://$PROJECT_DIR$/ss.py" />
     <entry file="file://$PROJECT_DIR$/nginx.py" />
     <entry file="file://$PROJECT_DIR$/nb.py" />
     <entry file="file://$PROJECT_DIR$/gui.py" />
@@ -850,17 +828,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cp.py">
+    <entry file="file://$PROJECT_DIR$/new/loga.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1463">
-          <caret line="78" column="17" selection-start-line="78" selection-start-column="17" selection-end-line="78" selection-end-column="17" />
-          <folding />
+        <state relative-caret-position="189">
+          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/nn/clockdate.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1007">
+        <state relative-caret-position="653">
           <caret line="56" column="46" selection-start-line="56" selection-start-column="46" selection-end-line="56" selection-end-column="46" />
           <folding />
         </state>
@@ -868,10 +845,26 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/new/del.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
+        <state relative-caret-position="21">
           <caret line="13" column="22" selection-start-line="13" selection-start-column="22" selection-end-line="13" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/watch.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cp.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="21">
+          <caret line="80" column="17" selection-start-line="80" selection-start-column="17" selection-end-line="80" selection-end-column="17" />
           <folding>
-            <element signature="e#37#50#0" expanded="true" />
+            <marker date="1486773721116" expanded="true" signature="1603:1636" ph="..." />
           </folding>
         </state>
       </provider>
