@@ -1,12 +1,21 @@
-from urllib import request
-from urllib import parse
+import requests
+import json
+import time
 
-url = 'http://121.10.141.71:8081/api/counters'
-head = {'Content-Type':'application/x-www-form-urlencoded'}
-
-data = {'endpoints':'113.107.161.24'}
-data = parse.urlencode(data).encode('ascii')
-req = request.Request(url,data)
-page = request.urlopen(req).read()
-
-print(page)
+url = 'http://113.107.161.47:9966/graph/history'
+head = {'Content-Type': 'application/json'}
+end = int(time.time())
+start = end - 60
+data = {
+    "start": start,
+    "end": end,
+    "cf": "AVERAGE",
+    "endpoint_counters": [
+        dict(endpoint="113.107.149.50", counter="cpu.irq"),
+        dict(endpoint="113.107.149.50", counter="cpu.idle"),
+        dict(endpoint="113.107.148.73", counter="cpu.idle")
+    ]
+}
+r = requests.post(url, json.dumps(data))
+g = r.json()
+print(g)
