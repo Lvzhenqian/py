@@ -48,5 +48,6 @@ if __name__ == '__main__':
                 if not opt.last and not opt.number:
                     print(f.strip())
                 else:
+
                     args(f.strip(),js, last=opt.last, number=opt.number)
                     js += 1
