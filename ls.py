@@ -105,7 +105,6 @@ def Show(x):
                 print(color(i), end='  ')
         print()
 
-
 def _more(x):
     o = opt()
     if os.path.isfile(x) or os.path.islink(x):
