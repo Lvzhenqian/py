@@ -36,6 +36,8 @@ def main():
     while True:
         try:
             user = input('username >>> ')
+            if user.lower() == 'quit':
+                return
             connect.user(user.strip())
             passwd = getpass.getpass()
             ret = connect.pass_(passwd.strip())
