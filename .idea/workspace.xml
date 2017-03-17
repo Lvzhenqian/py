@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b9a64903-94c2-4645-839c-c65542a2abe8" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/15-22.log" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test.log" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SortLogFile.py" afterPath="$PROJECT_DIR$/SortLogFile.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/aaa.ipynb" afterPath="$PROJECT_DIR$/aaa.ipynb" />
-    </list>
+    <list default="true" id="b9a64903-94c2-4645-839c-c65542a2abe8" name="Default" comment="" />
     <ignored path="Py.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -608,7 +603,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="95" y="140" width="1272" height="803" extended-state="1" />
+    <frame x="95" y="140" width="1272" height="803" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16721044" sideWeight="0.49421486" order="0" side_tool="false" content_ui="combo" />
