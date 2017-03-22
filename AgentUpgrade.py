@@ -1,5 +1,8 @@
+#coding:utf-8
 from urllib import request
 from urllib import error
+from threading import Thread
+import socket
 import requests
 import json
 import time
@@ -9,7 +12,7 @@ from hashlib import md5 as md5sum
 from zipfile import ZipFile
 
 logging.basicConfig(level=logging.INFO,
-                    format='[%(filename)s:%(process)s]--[%(asctime)s] %(levelname)s %(message)s',
+                    format='[%(process)s %(processName)s]--[%(threadName)10s]--[%(asctime)s] %(levelname)7s %(message)s',
                     filename='cron.log',
                     filemode='a')
 
@@ -18,19 +21,26 @@ def Install(x: str, ds: str):
 	try:
 		f = ZipFile(x, mode='r')
 		f.extractall(ds)
+		Down_md5 = 'http://fe.open-falcon.7road.net:9526/windows/md5.txt'
+		request.urlretrieve(Down_md5, r'C:\falcon_agent\agent\md5.txt')
+	except error.HTTPError:
+		logging.error('MD5 File Download error!')
+		return
 	except Exception:
 		pass
-	return os.system(ds + 'Agent-install.vbs')
-
+	os.system(os.path.join(ds, 'Agent-install.vbs'))
+	return
 
 
 def SendVersion():
-	with open(r'C:\\windows\\system32\\7roadyw\\agent\\cfg.json') as cfg:
-		try:
-			hsname = json.loads(cfg.read())['hostname']
-		except error.HTTPError:
-			return logging.warning('Push Version Fail.')
-
+	hsname,version = '',1
+	try:
+		with open(r'C:\windows\system32\7roadyw\agent\cfg.json') as cfg:
+			load = json.loads(cfg.read())
+			hsname = load['hostname']
+			version = load['version']
+	except FileNotFoundError:
+		logging.error('Not file cfg.json!')
 	url = 'http://127.0.0.1:1988/v1/push'
 	parms = [
 		{
@@ -38,7 +48,7 @@ def SendVersion():
 			"endpoint": hsname,
 			"timestamp": int(time.time()),
 			"step": 300,
-			"value": 2,
+			"value": version,
 			"counterType": "GAUGE",
 			"tags": ""
 		},
@@ -50,34 +60,61 @@ def SendVersion():
 		return logging.warning('Push Version Fail.')
 
 
+def Download_Package(s_md5):
+	try:
+		Down_zip = 'http://fe.open-falcon.7road.net:9526/windows/agent.zip'
+		logging.info('Downloading...')
+		if not os.path.isdir(r'C:\falcon_agent'):
+			os.mkdir(r'C:\falcon_agent')
+		request.urlretrieve(Down_zip, r'C:\falcon_agent\agent.zip')
+		with open(r'C:\falcon_agent\agent.zip', 'rb') as ff:
+			down_md5 = md5sum(ff.read())
+		if s_md5.split()[0].decode() == down_md5.hexdigest():
+			t = Thread(target=Install,args=(r'C:\falcon_agent\agent.zip', r'C:\falcon_agent'),name='Installing')
+			t.start()
+			t.join()
+		else:
+			logging.warning('Download warning! please try to Download of yourself.')
+			return
+		logging.info('Update finish.')
+		return
+	except error.HTTPError:
+		logging.error("Can't download the package.please check the Url.")
+
+
 def Check():
 	md5file = None
 	try:
 		with request.urlopen('http://fe.open-falcon.7road.net:9526/windows/md5.txt') as f:
 			md5file = f.read()
 			server_md5 = md5sum(md5file).hexdigest()
-		file = r'C:\\windows\\system32\\7roadyw\\agent\\md5.txt'
+		file = r'C:\windows\system32\7roadyw\agent\md5.txt'
 		if os.path.exists(file):
-			with open(file, 'r') as fd:
+			with open(file, 'rb') as fd:
 				file_md5 = md5sum(fd.read()).hexdigest()
 			if file_md5 == server_md5:
 				return logging.info("Same file don't use Update...exit. ")
-	# now! Updateing...
-		logging.info('Downloading...')
-		request.urlretrieve('http://fe.open-falcon.7road.net:9526/windows/agent.zip', r'C:\\falcon_agent\\agent.zip')
 	except error.HTTPError:
-
-		return
-	with open(r'C:\\falcon_agent\\agent.zip', 'rb') as ff:
-		down_md5 = md5sum(ff.read())
-	if md5file.split()[0].decode() == down_md5.hexdigest():
-		Install(r'C:\\falcon_agent\\agent.zip', r'C:\\falcon_agent\\')
-	else:
-		logging.warning('Download warning! please try to Download of yourself.')
-		return
-	return logging.info('Update finish.')
+		logging.error("Can not connect [http://fe.open-falcon.7road.net:9526/windows/md5.txt] the Url.")
+	t = Thread(target=Download_Package, args=(md5file,), name='Download')
+	t.start()
+	t.join()
 
 
 if __name__ == '__main__':
 	Check()
-	SendVersion()
+	n = 0
+	while n < 5:
+		try:
+			test = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+			test.connect(('127.0.0.1',1988))
+			time.sleep(1)
+			test.close()
+			SendVersion()
+			break
+		except ConnectionRefusedError:
+			logging.error('Cat not connect 1988 port!')
+			time.sleep(1)
+		n += 1
+
+
