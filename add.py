@@ -11,7 +11,7 @@ class Qy:
         self.__ajax_req = 'http://www.qycn.com/ajax.request.php?act=26'
         self.__image_url = 'http://www.qycn.com/yzcode.php?name=yz_login&num='
 
-    def __read_conf(self, file: str) -> dict:
+    def __read_conf(self, file: str) -> list:
         pass
 
     def __login_web(self) -> request.build_opener:
