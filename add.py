@@ -13,6 +13,7 @@ class Qy:
         self.__image_url = 'http://www.qycn.com/yzcode.php?name=yz_login&num='
         self.__manage = 'http://dns.qycn.com/index.php'
         self.__domid = {'shenquol.com': 18108, 'ddshenqu.cn': 9794, 'aeonsaga.com': 11283, '7road.net': 7106}
+        self.__opener = self.__login_web()
 
     def __read_file(self, fd) -> iter:
         with open(fd, 'rt', encoding='utf8') as f:
@@ -67,35 +68,29 @@ class Qy:
             # 		mc = cmp.match(x.strip().decode())
             # 		tockenkey = mc.groups()[0]
             # 		break
-            return opener
+            return opener.open
         return False
 
-    def checker(self, dm, address=''):
-        opener = self.__login_web()
+    def checker(self, dm:str, address='') -> list:
         first, end = dm.split('.', 1)
-
         data = {'myzone': first, 'myaddress': address, 'mytype': '', 'mypriority': '', 'page_size': '', 'Submit': '查询'}
         domain = 'http://dns.qycn.com/index.php?tp=domrs&domid=%d' % (self.__domid[end])
         querystring = parse.urlencode(data)
         req = request.Request(url=domain, data=querystring.encode('ascii'))
-        resp = opener.open(req).read()
+        resp = self.__opener(req).read()
         rex = r'(\b%s)<.*?>\s*<.*?>(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})<.*?>\s*<.*?>(\w{4})' % dm
         cmx = re.compile(rex)
-        lst = cmx.findall(resp.decode())
-        if len(lst) == 2:
-            print('{} It have domain in the nameserver: '.format(dm))
-            print('{}\r\n{}'.format(*lst))
-            return lst
-        elif not lst:
-            return []
-        else:
-            return lst
+        return cmx.findall(resp.decode())
 
     def Add_to_list(self, zone, address, operator):
         rule = {'tel':10,'uni':2}
         parms = {
             'tp': 'domrs', 'ac': 'adds_a', 'action': 'a', 'domid': 18108, 'dname': zone, 'vdname': zone,
             'address': address, 'mtype': rule[operator], 'mypriority': 10, 'myttl': 3600, 'submit': '新增'}
+        query = parse.urlencode(parms)
+        req = request.Request(self.__manage,data=query)
+        resp = self.__opener(req)
+
 
     def Delete_domain(self, name):
         first,end = name.split('.',1)
