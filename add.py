@@ -85,7 +85,9 @@ class QYclient:
 		if not find:
 			return []
 		ret = namedtuple('checker', ['id', 'domain', 'address', 'operator'])
-		return ret(find)
+		if len(find) >= 2:
+			return (ret(*x) for x in find)
+		return ret(*find)
 
 	def Add_to_list(self, *, name, address, operator) -> str:
 		first, end = name.split('.', 1)
@@ -138,7 +140,7 @@ class QYclient:
 										address=nametp.unicom, operator='中国联通'))
 				else:
 					fail += 1
-		return '成功：\033[1;32 {} \033[0m  失败：\033[1;31 {} \033[0m 总数：{}'.format(successful, fail, successful + fail)
+		return '成功：\033[1;32m {} \033[0m  失败：\033[1;31m {} \033[0m 总数：{}'.format(successful, fail, successful + fail)
 
 
 if __name__ == '__main__':
@@ -155,22 +157,25 @@ if __name__ == '__main__':
 			address = input('【可选】输入域名对应的IP地址： ')
 			req = client.checker(name, address)
 			if req:
-				p = '记录ID：{}--域名：{}--解析地址：{}--解析线路：{}'.format(req.id, req.domain, req.address, req.operator)
-				print(p)
+				for n in req:
+					p = '记录ID：\033[1;32m {} \033[0m 域名：{} 解析地址：\033[1;32m {} \033[0m 解析线路：{}'.format(n.id,
+																								   n.domain, n.address,
+																								   n.operator)
+					print(p)
 			else:
 				print('没有找到这条DNS记录')
 		if new.lower() == 'add':
-			rule = {'1':'全部线路','2':'中国联通'}
+			rule = {'1': '全部线路', '2': '中国联通'}
 			name = input('输入要绑定的域名：')
 			address = input('输入域名对应的IP地址： ')
 			oper = input('输入解析的线路 [1]全部线路 [2]中国联通： ')
-			req = client.Add_to_list(name=name,address=address,operator=rule[oper])
-			print('{name} add to list {stat}'.format(name=name,stat=req))
+			req = client.Add_to_list(name=name, address=address, operator=rule[oper])
+			print('{name} add to list {stat}'.format(name=name, stat=req))
 		if new.lower() == 'del':
 			name = input('输入要删除的域名： ')
 			ck = client.checker(name)
 			if ck:
-				stat = client.Delete_domain(domain_id=ck.id,name=name)
-				print('删除{}: \033[1;32 {} \033[0m'.format(name,stat))
+				stat = client.Delete_domain(domain_id=ck.id, name=name)
+				print('删除{}: \033[1;32m {} \033[0m'.format(name, stat))
 			else:
 				print('没有找到\033[1;31m {} \033[0m解析记录'.format(name))
