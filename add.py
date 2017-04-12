@@ -1,7 +1,7 @@
 from urllib import request, parse
 from http import cookiejar
 from collections import namedtuple
-import re, json, time
+import re, json
 
 
 class QYclient:
@@ -47,7 +47,7 @@ class QYclient:
 		yz_code = opener.open(self.__image_url).read()
 		with open('./yz_code.png', 'wb') as f:
 			f.write(yz_code)
-		yz_login = input('Input yz code: ')
+		yz_login = input('请输入验证码：')
 		parms = {
 			'username': self.__login_user,
 			'password': self.__login_pwd,
@@ -142,6 +142,7 @@ class QYclient:
 
 
 if __name__ == '__main__':
+	print('开始登陆群英解析站点')
 	client = QYclient()
 	while True:
 		new = input("请输入将要执行的操作[run|del|add|check|quit]：")
