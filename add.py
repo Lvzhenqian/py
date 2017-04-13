@@ -35,7 +35,7 @@ class QYclient:
 			'Accept-Language': 'zh-CN,zh;q=0.8,en;q=0.6',
 			'Host': 'www.qycn.com',
 			'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
-						  'Chrome/56.0.2924.76 Safari/537.36',
+			              'Chrome/56.0.2924.76 Safari/537.36',
 			'X-Requested-With': 'XMLHttpRequest',
 			'Referer': 'http://www.qycn.com/user.php?action=login&goto=http://www.qycn.com/synlogin.php?action=dns',
 			'Origin': 'http://www.qycn.com'
@@ -73,7 +73,11 @@ class QYclient:
 		return False
 
 	def checker(self, dm: str, address='') -> namedtuple:
-		first, end = dm.split('.', 1)
+		if dm:
+			first, end = dm.split('.', 1)
+		else:
+			first = ''
+			end = input('请输入将要在那个域名后缀中查询IP地址：')
 		data = {'myzone': first, 'myaddress': address, 'mytype': '', 'mypriority': '', 'page_size': '', 'Submit': '查询'}
 		domain = 'http://dns.qycn.com/index.php?tp=domrs&domid=%d' % (self.__domid[end])
 		querystring = parse.urlencode(data)
@@ -84,7 +88,7 @@ class QYclient:
 		find = cmx.findall(resp.decode())
 		if not find:
 			return []
-		ret = namedtuple('checker', ['id', 'domain', 'address', 'operator']) 
+		ret = namedtuple('checker', ['id', 'domain', 'address', 'operator'])
 		return [ret(*x) for x in find]
 
 	def Add_to_list(self, *, name, address, operator) -> str:
@@ -118,24 +122,20 @@ class QYclient:
 		for nametp in it:
 			telcheck = self.checker(nametp.name, nametp.tellcom)
 			if not telcheck:
-				stat = self.Add_to_list(name=nametp.name, address=nametp.tellcom, operator='全部线路')
-				if stat:
+				telstat = self.Add_to_list(name=nametp.name, address=nametp.tellcom, operator='全部线路')
+				if telstat:
 					successful += 1
-					print(self.Outprint(count=successful,
-										stat=stat, name=nametp.name,
-										address=nametp.tellcom, operator='全部线路'))
+					print(self.Outprint(count=successful,stat=telstat, name=nametp.name,address=nametp.tellcom, operator='全部线路'))
 				else:
 					fail += 1
 
 			unichekc = self.checker(nametp.name, nametp.unicom)
 			if not unichekc:
 
-				stat = self.Add_to_list(name=nametp.name, address=nametp.unicom, operator='中国联通')
+				unistat = self.Add_to_list(name=nametp.name, address=nametp.unicom, operator='中国联通')
 				if stat:
 					successful += 1
-					print(self.Outprint(count=successful,
-										stat=stat, name=nametp.name,
-										address=nametp.unicom, operator='中国联通'))
+					print(self.Outprint(count=successful, stat=unistat, name=nametp.name,address=nametp.unicom, operator='中国联通'))
 				else:
 					fail += 1
 		return '成功：{}  失败：{} 总数：{}'.format(successful, fail, successful + fail)
@@ -157,7 +157,7 @@ if __name__ == '__main__':
 			if req:
 				for n in req:
 					print("----------------------")
-					p = '记录ID：{} 域名：{} 解析地址：{} 解析线路：{}'.format(n.id,n.domain, n.address,n.operator)
+					p = '记录ID：{} 域名：{} 解析地址：{} 解析线路：{}'.format(n.id, n.domain, n.address, n.operator)
 					print(p)
 					print("----------------------")
 			else:
@@ -178,7 +178,7 @@ if __name__ == '__main__':
 				while ck:
 					print("----------------------")
 					for n in range(len(ck)):
-						print('{} {} {} {}'.format(n,ck[n].id,ck[n].domain,ck[n].address))
+						print('{} {} {} {}'.format(n, ck[n].id, ck[n].domain, ck[n].address))
 					print("----------------------")
 					id_n = input("请输入将要删除的解析记录，[quit]退出删除：")
 					if id_n.lower() == 'quit':
