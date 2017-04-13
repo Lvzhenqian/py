@@ -1,107 +1,156 @@
-import os, argparse, socket, struct, select, time
+import subprocess, json, time,os
+from collections import namedtuple
+from urllib import request, error
 
-ICMP_ECHO_REQUEST = 8
-DEFAULT_TIMEOUT = 2
-DEFAULT_COUNT = 4
-
-
-class Pinger:
-	def __init__(self, target_host, count=DEFAULT_COUNT, timeout=DEFAULT_TIMEOUT):
-		self.target_host = target_host
-		self.count = count
-		self.timeout = timeout
-
-	def do_checksum(self, source_string):
-		sum = 0
-		max_count = (len(source_string) / 2) * 2
-		count = 0
-		while count < max_count:
-			val = ord(source_string[count + 1]) * 256 + ord(source_string[count])
-			sum += val
-			sum &= 0xffffffff
-			count += 2
-		if max_count < len(source_string):
-			sum += ord(source_string[len(source_string) - 1])
-			sum &= 0xffffffff
-		sum = (sum >> 16) + (sum & 0xffff)
-		sum += (sum >> 16)
-		answer = ~sum
-		answer &= 0xffff
-		answer = answer >> 8 | (answer << 8 & 0xff00)
-		return answer
-
-	def receive_pong(self, sock, ID, timeout):
-		time_remaining = timeout
-		while True:
-			start_time = time.time()
-			readable = select.select([sock], [], [], time_remaining)
-			time_spent = (time.time() - start_time)
-			if readable[0] == []:
-				return
-			time_received = time.time()
-			recv_packet, addr = sock.recvfrom(1024)
-			icmp_header = recv_packet[20:28]
-			type, code, checksum, packet_ID, sequence = struct.unpack("bbHHh", icmp_header)
-			if packet_ID == ID:
-				bytes_in_double = struct.calcsize("d")
-				time_sent = struct.unpack("d", recv_packet[28:28 + bytes_in_double])[0]
-				return time_received - time_sent
-			time_remaining -= time_spent
-			if time_remaining <= 0:
-				return
-
-	def send_ping(self, sock, ID):
-		target_addr = socket.gethostbyname(self.target_host)
-		my_checksum = 0
-		header = struct.pack("bbHHh", ICMP_ECHO_REQUEST, 0, my_checksum, ID, 1)
-		bytes_in_double = struct.calcsize("d")
-		data = (192 - bytes_in_double) * "Q"
-		data += struct.pack("d", time.time())
-		new_data = data.encode()
-		my_checksum = self.do_checksum(header + new_data)
-		header = struct.pack(
-			"bbHHh", ICMP_ECHO_REQUEST, 0, socket.htons(my_checksum), ID, 1
-		)
-		packet = header + new_data
-		sock.sendto(packet, (target_addr, 1))
-
-	def ping_once(self):
-		icmp = socket.getprotobyname("icmp")
-		try:
-			sock = socket.socket(socket.AF_INET, socket.SOCK_RAW, icmp)
-		except socket.error as e:
-			errno, msg = e
-			if errno == 1:
-				msg += "ICMP messages can only be sent from root user processes"
-				raise socket.error(msg)
-		except Exception as e:
-			print("Exception: {}".format(e))
-		my_ID = os.getpid() & 0xFFFF
-		self.send_ping(sock, my_ID)
-		delay = self.receive_pong(sock, my_ID, self.timeout)
-		sock.close()
-		return delay
-
-	def ping(self):
-		for i in range(self.count):
-			print(i)
-			print("Ping to {}...".format(self.target_host), end='')
-			try:
-				delay = self.ping_once()
-			except socket.gaierror as e:
-				print("Ping failed.(socket error: {} )".format(e))
-				break
-			if delay is None:
-				print("Ping failed.timeout within {}sec.".format(self.timeout))
-			else:
-				delay *= 1000
-				print("Get Pong in %0.4fms" % delay)
+file = r'c:\windows\7roadyw\agent\cfg.json'
+try:
+    with open(file, mode='r', encoding='utf8') as f:
+        cfg = json.loads(f.read())
+    hostname = cfg['hostname']
+    req = request.urlopen('http://ip.7road.net/')
+    country = req.read().split()[1]
+except error.HTTPError:
+    hostname, country = '', ''
+except json.JSONDecodeError:
+    hostname, country = '', ''
+count = 2
 
 
-if __name__ == '__main__':
-	parser = argparse.ArgumentParser(description='Python Ping')
-	parser.add_argument('--target-host', action='store', dest='target_host', required=True)
-	given_args = parser.parse_args()
-	target_host = given_args.target_host
-	pinger = Pinger(target_host=target_host)
-	pinger.ping()
+def Ping(host: str, c=count) -> namedtuple:
+    def fil(x):
+        ret, tmp = [], ''
+        for i in x:
+            switch = True if i.isdigit() else False
+            if switch:
+                tmp = tmp + i
+            elif tmp:
+                ret.append(int(tmp))
+                tmp = ''
+        return ret
+
+    si = subprocess.STARTUPINFO()
+    si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+    req = namedtuple('stat', ['host', 'lost', 'avg', 'max', 'min'])
+    with subprocess.Popen('cmd /c chcp 437 & ping -n {count} {host}'.format(count=c, host=host),
+                          shell=True,
+                          stderr=subprocess.DEVNULL, stdout=subprocess.PIPE, stdin=subprocess.DEVNULL,
+                          universal_newlines=True,
+                          startupinfo=si,env=os.environ) as process:
+        try:
+            process.wait(180)
+            out = [x.strip() for x in process.stdout if 'Average' in x or 'Lost' in x]
+            if len(out) > 1:
+                *_, lost = fil(out[0])
+                mi, ma, avg = fil(out[1])
+                return req(host, lost, avg, ma, mi)
+            else:
+                return req(host, 100, 0, 0, 0)
+        except TimeoutError:
+            process.kill()
+            return req(host, 100, 0, 0, 0)
+
+
+ip = namedtuple('IP', ['falcon', 'url', 'nameserver', 'c'])
+if country == '中国'.encode():
+    mapping = ip(Ping('113.107.161.47'), Ping('www.baidu.com'), Ping('114.114.114.114'), 'GN')
+else:
+    mapping = ip(Ping('8.8.4.4'), Ping('www.google.com'), Ping('8.8.8.8'), 'HW')
+date = int(time.time())
+metric = [{
+    "metric": 'ping.lost.{}'.format(mapping.c),
+    "endpoint": hostname,
+    "timestamp": date,
+    "step": 300,
+    "value": mapping.falcon.lost,
+    "counterType": "GAUGE",
+    "tags": 'test_ip={}'.format(mapping.falcon.host)
+}, {
+    "metric": 'ping.avg.{}'.format(mapping.c),
+    "endpoint": hostname,
+    "timestamp": date,
+    "step": 300,
+    "value": mapping.falcon.avg,
+    "counterType": "GAUGE",
+    "tags": 'test_ip={}'.format(mapping.falcon.host)
+}, {
+    "metric": 'ping.min.{}'.format(mapping.c),
+    "endpoint": hostname,
+    "timestamp": date,
+    "step": 300,
+    "value": mapping.falcon.min,
+    "counterType": "GAUGE",
+    "tags": 'test_ip={}'.format(mapping.falcon.host)
+}, {
+    "metric": 'ping.max.{}'.format(mapping.c),
+    "endpoint": hostname,
+    "timestamp": date,
+    "step": 300,
+    "value": mapping.falcon.max,
+    "counterType": "GAUGE",
+    "tags": 'test_ip={}'.format(mapping.falcon.host)
+}, {
+    "metric": 'ping.lost.{}'.format(mapping.c),
+    "endpoint": hostname,
+    "timestamp": date,
+    "step": 300,
+    "value": mapping.url.lost,
+    "counterType": "GAUGE",
+    "tags": 'test_ip={}'.format(mapping.url.host)
+}, {
+    "metric": 'ping.avg.{}'.format(mapping.c),
+    "endpoint": hostname,
+    "timestamp": date,
+    "step": 300,
+    "value": mapping.url.avg,
+    "counterType": "GAUGE",
+    "tags": 'test_ip={}'.format(mapping.url.host)
+}, {
+    "metric": 'ping.min.{}'.format(mapping.c),
+    "endpoint": hostname,
+    "timestamp": date,
+    "step": 300,
+    "value": mapping.url.min,
+    "counterType": "GAUGE",
+    "tags": 'test_ip={}'.format(mapping.url.host)
+}, {
+    "metric": 'ping.max.{}'.format(mapping.c),
+    "endpoint": hostname,
+    "timestamp": date,
+    "step": 300,
+    "value": mapping.url.max,
+    "counterType": "GAUGE",
+    "tags": 'test_ip={}'.format(mapping.url.host)
+}, {
+    "metric": 'ping.lost.{}'.format(mapping.c),
+    "endpoint": hostname,
+    "timestamp": date,
+    "step": 300,
+    "value": mapping.nameserver.lost,
+    "counterType": "GAUGE",
+    "tags": 'test_ip={}'.format(mapping.nameserver.host)
+}, {
+    "metric": 'ping.avg.{}'.format(mapping.c),
+    "endpoint": hostname,
+    "timestamp": date,
+    "step": 300,
+    "value": mapping.nameserver.avg,
+    "counterType": "GAUGE",
+    "tags": 'test_ip={}'.format(mapping.nameserver.host)
+}, {
+    "metric": 'ping.min.{}'.format(mapping.c),
+    "endpoint": hostname,
+    "timestamp": date,
+    "step": 300,
+    "value": mapping.nameserver.min,
+    "counterType": "GAUGE",
+    "tags": 'test_ip={}'.format(mapping.nameserver.host)
+}, {
+    "metric": 'ping.max.{}'.format(mapping.c),
+    "endpoint": hostname,
+    "timestamp": date,
+    "step": 300,
+    "value": mapping.nameserver.max,
+    "counterType": "GAUGE",
+    "tags": 'test_ip={}'.format(mapping.nameserver.host)
+}
+]
