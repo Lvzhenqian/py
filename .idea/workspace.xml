@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5c94286a-fedd-4af8-9cbd-68ec91f0305d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/py.iml" afterPath="$PROJECT_DIR$/.idea/py.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/add.py" afterPath="$PROJECT_DIR$/add.py" />
-    </list>
+    <list default="true" id="5c94286a-fedd-4af8-9cbd-68ec91f0305d" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -23,8 +18,8 @@
       <file leaf-file-name="add.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/add.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="692">
-              <caret line="150" column="9" lean-forward="false" selection-start-line="150" selection-start-column="9" selection-end-line="150" selection-end-column="9" />
+            <state relative-caret-position="1721">
+              <caret line="145" column="23" lean-forward="true" selection-start-line="145" selection-start-column="23" selection-end-line="145" selection-end-column="23" />
               <folding>
                 <element signature="e#213#545#0" expanded="false" />
                 <element signature="e#585#1022#0" expanded="false" />
@@ -288,7 +283,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-4" y="-4" width="1688" height="1014" extended-state="6" />
+    <frame x="-4" y="-4" width="1688" height="1014" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18998717" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -497,8 +492,33 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/add.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="692">
-          <caret line="150" column="9" lean-forward="false" selection-start-line="150" selection-start-column="9" selection-end-line="150" selection-end-column="9" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#213#545#0" expanded="false" />
+            <element signature="e#585#1022#0" expanded="false" />
+            <element signature="e#1074#2693#0" expanded="false" />
+            <element signature="e#1083#1604#0" expanded="false" />
+            <element signature="e#1933#2048#0" expanded="false" />
+            <element signature="e#5666#6006#0" expanded="false" />
+            <element signature="e#6037#6393#0" expanded="false" />
+            <element signature="e#6424#6932#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="588">
+          <caret line="28" column="22" lean-forward="false" selection-start-line="28" selection-start-column="22" selection-end-line="28" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/add.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1721">
+          <caret line="145" column="23" lean-forward="true" selection-start-line="145" selection-start-column="23" selection-end-line="145" selection-end-column="23" />
           <folding>
             <element signature="e#213#545#0" expanded="false" />
             <element signature="e#585#1022#0" expanded="false" />
