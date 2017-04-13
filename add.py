@@ -1,7 +1,7 @@
 from urllib import request, parse
 from http import cookiejar
 from collections import namedtuple
-import re, json
+import re, json,sys
 
 
 class QYclient:
@@ -70,20 +70,23 @@ class QYclient:
 			# 		tockenkey = mc.groups()[0]
 			# 		break
 			return opener.open
-		return False
+		else:
+			sys.exit()
 
 	def checker(self, dm: str, address='') -> namedtuple:
 		if dm:
 			first, end = dm.split('.', 1)
+			rex = r'<.*name_(\w+)">(\b%s)<.*?>\s*<.*?>(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})<.*?>\s*<.*?>(\w{4})' % dm
 		else:
 			first = ''
 			end = input('请输入将要在那个域名后缀中查询IP地址：')
+			rex = r'<.*name_(\w+)">(.*)<.*?>\s*<.*?>(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})<.*?>\s*<.*?>(\w{4})'
 		data = {'myzone': first, 'myaddress': address, 'mytype': '', 'mypriority': '', 'page_size': '', 'Submit': '查询'}
 		domain = 'http://dns.qycn.com/index.php?tp=domrs&domid=%d' % (self.__domid[end])
 		querystring = parse.urlencode(data)
 		req = request.Request(url=domain, data=querystring.encode('ascii'))
 		resp = self.__opener(req).read()
-		rex = r'<.*name_(\w+)">(\b%s)<.*?>\s*<.*?>(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})<.*?>\s*<.*?>(\w{4})' % dm
+
 		cmx = re.compile(rex)
 		find = cmx.findall(resp.decode())
 		if not find:
@@ -151,8 +154,8 @@ if __name__ == '__main__':
 		if new.lower() == 'run':
 			print(client.run())
 		if new.lower() == 'check':
-			name = input('输入要查询的域名：')
-			address = input('【可选】输入域名对应的IP地址： ')
+			name = input('【可选】输入要查询的域名：')
+			address = input('【可选】输入要查询的IP地址： ')
 			req = client.checker(name, address)
 			if req:
 				for n in req:
