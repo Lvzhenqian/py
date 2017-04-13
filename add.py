@@ -123,24 +123,24 @@ class QYclient:
 		it = self.__read_file('./domain.txt')
 		successful, fail = 0, 0
 		for nametp in it:
+			print(nametp)
 			telcheck = self.checker(nametp.name, nametp.tellcom)
 			if not telcheck:
 				telstat = self.Add_to_list(name=nametp.name, address=nametp.tellcom, operator='全部线路')
 				if telstat:
 					successful += 1
 					print(self.Outprint(count=successful,stat=telstat, name=nametp.name,address=nametp.tellcom, operator='全部线路'))
-				else:
-					fail += 1
+			else:
+				fail += 1
 
 			unichekc = self.checker(nametp.name, nametp.unicom)
 			if not unichekc:
-
 				unistat = self.Add_to_list(name=nametp.name, address=nametp.unicom, operator='中国联通')
-				if stat:
+				if unistat:
 					successful += 1
 					print(self.Outprint(count=successful, stat=unistat, name=nametp.name,address=nametp.unicom, operator='中国联通'))
-				else:
-					fail += 1
+			else:
+				fail += 1
 		return '成功：{}  失败：{} 总数：{}'.format(successful, fail, successful + fail)
 
 
@@ -187,6 +187,7 @@ if __name__ == '__main__':
 					if id_n.lower() == 'quit':
 						break
 					stat = client.Delete_domain(domain_id=ck[int(id_n)].id, name=name)
+					ck.pop(int(id_n))
 					print('删除{}: {}'.format(name, stat))
 			else:
 				print('没有找到 {} 解析记录'.format(name))
