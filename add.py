@@ -101,7 +101,7 @@ class QYclient:
 		"""
 		if dm:
 			nt = dm.rsplit('.', 2)
-			first, end = nt[0], '.'.join(n[-2:])
+			first, end = nt[0], '.'.join(nt[-2:])
 			rex = r'<.*name_(\w+)">(\b%s)<.*?>\s*<.*?>(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})<.*?>\s*<.*?>(\w{4})' % dm
 		else:
 			first = ''
@@ -129,7 +129,7 @@ class QYclient:
 		:return: 添加成功返回字符串状态，否则返回False
 		"""
 		nt = name.rsplit('.', 2)
-		first, end = nt[0], '.'.join(n[-2:])
+		first, end = nt[0], '.'.join(nt[-2:])
 		mapping = {'全部线路': 10, '中国联通': 2}
 		parms = {
 			'tp': 'domrs', 'ac': 'adds_a', 'action': 'a', 'domid': self.__domid[end], 'dname': first, 'vdname': first,
@@ -149,7 +149,7 @@ class QYclient:
 		:return: 返回操作结果字符串。
 		"""
 		nt = name.rsplit('.', 2)
-		first, end = nt[0], '.'.join(n[-2:])
+		first, end = nt[0], '.'.join(nt[-2:])
 		p = dict(tp='domrs', ac='ajaxs_del_a', redtp='a', redid=domain_id, domid=self.__domid[end])
 		query = parse.urlencode(p)
 		reque = request.Request(self.__manage, data=query.encode('ascii'))
