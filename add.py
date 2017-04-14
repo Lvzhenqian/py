@@ -5,10 +5,16 @@ import re, json,sys
 
 
 class QYclient:
+	'''
+	类变量，用于在所有实例都可以使用这个账号与密码
+	'''
 	__login_user = 'gdddt'
 	__login_pwd = 'QY7RoaD@lktWzz7@Q'
 
 	def __init__(self):
+		'''
+		构造函数，每当实例化时，增加一些属性与生成一个opener()
+		'''
 		self.__login_request = 'http://www.qycn.com/ajax.request.php?act=26'
 		self.__image_url = 'http://www.qycn.com/yzcode.php?name=yz_login&num='
 		self.__manage = 'http://dns.qycn.com/index.php'
@@ -16,6 +22,12 @@ class QYclient:
 		self.__opener = self.__login_web()
 
 	def __read_file(self, fd) -> iter:
+		'''
+		处理domain.txt，解析出所需要的格式
+		:param fd: 传入文件路径
+		:return: 返回，namedtuple所组成的生成器,例子：
+		domain(name='s1558.shenquol.com', tellcom='113.107.148.122', unicom='112.90.248.122')
+		'''
 		with open(fd, 'rt', encoding='utf8') as f:
 			namelist, tup = [], []
 			dic = namedtuple('domain', ['name', 'tellcom', 'unicom'])
@@ -29,6 +41,10 @@ class QYclient:
 		return (j for n in range(len(tup)) for j in tup[n])
 
 	def __login_web(self) -> request.build_opener:
+		'''
+		登陆函数，手动输入验证码。
+		:return: 返回一个处理函数，opener() 用于打开这个站点的所有链接。
+		'''
 		header = {
 			'Content-Type': 'application/x-www-form-urlencoded',
 			'Accept': 'application/json, text/javascript, */*',
@@ -61,6 +77,9 @@ class QYclient:
 		ret = json.loads(resp.decode())
 		print(ret['msg'])
 		if ret['flag'] == 1:
+			'''
+			增加了一个GET链接，下方代码可以获取这个链接的tockenkey.因为没发现用处，先注释掉不使用。
+			'''
 			opener.open('http://www.qycn.com/synlogin.php?action=dns')
 			# tok = opener.open('http://www.qycn.com/synlogin.php?action=dns')
 			# cmp = re.compile(r'<.*?><a href=".*\?tokenkey=(.*)" target')
@@ -73,7 +92,13 @@ class QYclient:
 		else:
 			sys.exit()
 
-	def checker(self, dm: str, address='') -> namedtuple:
+	def checker(self, dm: str, address='') -> list:
+		'''
+		查询函数，用来查询域名或者IP地址的解析记录
+		:param dm: 传入域名字符串，可以为空
+		:param address: 传入IP地址字符串，可以为空
+		:return: 返回namedtuple 列表对象。
+		'''
 		if dm:
 			first, end = dm.split('.', 1)
 			rex = r'<.*name_(\w+)">(\b%s)<.*?>\s*<.*?>(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})<.*?>\s*<.*?>(\w{4})' % dm
@@ -95,6 +120,13 @@ class QYclient:
 		return [ret(*x) for x in find]
 
 	def Add_to_list(self, *, name, address, operator) -> str:
+		'''
+		增加函数，功能是把域名增加到解析记录里。
+		:param name: 传入要解析的域名字符串。
+		:param address: 传入对应的IP地址。
+		:param operator: 传入解析的线路。【全部线路】【中国联通】这两个其中一个。
+		:return: 添加成功返回字符串状态，否则返回False
+		'''
 		first, end = name.split('.', 1)
 		rule = {'全部线路': 10, '中国联通': 2}
 		parms = {
@@ -108,6 +140,12 @@ class QYclient:
 		return status.pop() if status else False
 
 	def Delete_domain(self, *, name, domain_id) -> str:
+		'''
+		删除域名函数
+		:param name: 传入将要删除的域名 
+		:param domain_id: 传入域名对应的ID
+		:return: 返回操作结果字符串。
+		'''
 		first, end = name.split('.', 1)
 		p = dict(tp='domrs', ac='ajaxs_del_a', redtp='a', redid=domain_id, domid=self.__domid[end])
 		query = parse.urlencode(p)
@@ -120,10 +158,13 @@ class QYclient:
 		return '[{count:>3}]执行结果：{stat}  域名：{name} 解析到：{address}--{operator}'.format(**kwargs)
 
 	def run(self):
+		'''
+		自动执行函数，用于自动增加domain.txt文件里的域名
+		:return: 返回添加的总结果字符串
+		'''
 		it = self.__read_file('./domain.txt')
 		successful, fail = 0, 0
 		for nametp in it:
-			print(nametp)
 			telcheck = self.checker(nametp.name, nametp.tellcom)
 			if not telcheck:
 				telstat = self.Add_to_list(name=nametp.name, address=nametp.tellcom, operator='全部线路')
