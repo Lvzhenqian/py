@@ -1,5 +1,24 @@
+#coding:utf8
 from .XmlTree import Tree, TreeWrite
+from subprocess import run, PIPE
+from platform import release
 
+
+class InstallDB:
+	def server_2003(self):
+		pass
+
+	def server_2008(self):
+		Framework_prc = run('ServerManagerCmd -i NET-Framework -a', shell=True, stdout=PIPE,stderr=PIPE)
+		stat = Framework_prc.stdout.split(b'\r\n')[-2]
+		#print(stat.decode('utf8'))
+		sql_prc = run()
+
+
+
+	def run(self):
+		rule = {'7': self.server_2008, '2003Server': self.server_2003}
+		return rule[release()]()
 
 class AutoDB:
 	def __init__(self):

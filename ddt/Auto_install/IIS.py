@@ -1,5 +1,8 @@
+# coding:utf8
 from .XmlTree import Tree, TreeWrite
 from urllib.parse import urlparse
+
+
 class AutoIIS:
 	def __init__(self):
 		self.__Road_config = r'D:\dandantang\Server1\Road.Service.exe.config'
@@ -20,21 +23,21 @@ class AutoIIS:
 				add.attrib['value'] = AreaName
 			if add.attrib['key'] == 'AppName':
 				add.attrib['value'] = Appname
-		TreeWrite(tree,self.__Road_config)
+		TreeWrite(tree, self.__Road_config)
 
 	def Flash_config(self, Req, parter_id, assist):
 		tree = Tree(self.__Flash_config)
 		root = tree.getroot()
 		req = root.find('config/REQUEST_PATH').attrib['value']
-		root.find('config/REQUEST_PATH').attrib['value'] = self.__dst(req,Req)
+		root.find('config/REQUEST_PATH').attrib['value'] = self.__dst(req, Req)
 		root.find('config/PARTER_ID').attrib['value'] = parter_id
 		info = root.find('config/PHP').attrib['infoPath']
-		root.find('config/PHP').attrib['infoPath'] = self.__dst(info,assist)
+		root.find('config/PHP').attrib['infoPath'] = self.__dst(info, assist)
 		comm = root.find('config/COMMUNITY_FRIEND_LIST_PATH').attrib['value']
-		root.find('config/COMMUNITY_FRIEND_LIST_PATH').attrib['value'] = self.__dst(comm,assist)
+		root.find('config/COMMUNITY_FRIEND_LIST_PATH').attrib['value'] = self.__dst(comm, assist)
 		interface = root.find('config/COMMUNITY_INTERFACE').attrib['path']
-		root.find('config/COMMUNITY_INTERFACE').attrib['path'] = self.__dst(interface,assist)
-		TreeWrite(tree,self.__Flash_config)
+		root.find('config/COMMUNITY_INTERFACE').attrib['path'] = self.__dst(interface, assist)
+		TreeWrite(tree, self.__Flash_config)
 
 	def Flash_web(self, login, logout, title):
 		tree = Tree(self.__Flash_web)
@@ -46,7 +49,7 @@ class AutoIIS:
 				add.attrib['value'] = logout
 			if add.attrib['key'] == 'SiteTitle':
 				add.attrib['value'] = title
-		TreeWrite(tree,self.__Flash_web)
+		TreeWrite(tree, self.__Flash_web)
 
 	def Flash_default(self):
 		pass
@@ -59,7 +62,7 @@ class AutoIIS:
 				add.attrib['value'] = Did
 			if add.attrib['key'] == 'AreaName':
 				add.attrib['value'] = Areaname
-		TreeWrite(tree,self.__request_config)
+		TreeWrite(tree, self.__request_config)
 
 	def host(self, q_name):
 		tmp = []
