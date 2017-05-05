@@ -207,6 +207,10 @@ if __name__ == '__main__':
 
 
 	def where():
+		"""
+		因账号不同，所以增加了选择函数。
+		:return: 返回一个QYclient类的实例。
+		"""
 		while True:
 			print(
 				'''

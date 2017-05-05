@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1e433983-7818-4e96-b3a1-0c7e6fc7e7c3" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/add.py" afterPath="$PROJECT_DIR$/add.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -27,8 +26,8 @@
       <file leaf-file-name="add.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/add.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-948">
-              <caret line="133" column="5" lean-forward="false" selection-start-line="133" selection-start-column="5" selection-end-line="133" selection-end-column="5" />
+            <state relative-caret-position="483">
+              <caret line="212" column="11" lean-forward="true" selection-start-line="212" selection-start-column="11" selection-end-line="212" selection-end-column="11" />
               <folding>
                 <element signature="e#0#33#0" expanded="true" />
                 <element signature="e#339#655#0" expanded="false" />
@@ -522,6 +521,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/add.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#33#0" expanded="true" />
+            <element signature="e#339#655#0" expanded="false" />
+            <element signature="e#687#1173#0" expanded="false" />
+            <element signature="e#1882#3684#0" expanded="false" />
+            <element signature="e#3737#4743#0" expanded="false" />
+            <element signature="e#4806#5566#0" expanded="false" />
+            <element signature="e#5623#6083#0" expanded="false" />
+            <element signature="e#6118#6204#0" expanded="false" />
+            <element signature="e#6224#7182#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/AgentUpgrade.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -734,8 +751,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/add.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-948">
-          <caret line="133" column="5" lean-forward="false" selection-start-line="133" selection-start-column="5" selection-end-line="133" selection-end-column="5" />
+        <state relative-caret-position="483">
+          <caret line="212" column="11" lean-forward="true" selection-start-line="212" selection-start-column="11" selection-end-line="212" selection-end-column="11" />
           <folding>
             <element signature="e#0#33#0" expanded="true" />
             <element signature="e#339#655#0" expanded="false" />
