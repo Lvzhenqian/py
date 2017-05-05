@@ -8,22 +8,32 @@ class QYclient:
 	"""
 	类变量，用于在所有实例都可以使用这个账号与密码
 	"""
-	__login_user = 'gdddt'
-	__login_pwd = 'QY7RoaD@lktWzz7@Q'
+	__sq_login_user = 'gdddt'
+	__sq_login_pwd = 'QY7RoaD@lktWzz7@Q'
+	__ddt_login_user = 'gdddt1'
+	__ddt_login_pwd = '7roadBT@9GMeyDia'
 
-	def __init__(self):
-		'''
+	def __init__(self, where=False):
+		"""
 		构造函数，每当实例化时，增加一些属性与生成一个opener()
-		'''
+		"""
 		self.__login_request = 'http://www.qycn.com/ajax.request.php?act=26'
 		self.__image_url = 'http://www.qycn.com/yzcode.php?name=yz_login&num='
 		self.__manage = 'http://dns.qycn.com/index.php'
-		self.__domid = {'shenquol.com': 18108, 'ddshenqu.cn': 9794, 'aeonsaga.com': 11283, '7road.net': 7106}
+		self.__configure = self.__config(where)
 		self.__opener = self.__login_web()
+
+	def __config(self, where):
+		return {'shenquol.com': 18108, 'ddshenqu.cn': 9794, 'aeonsaga.com': 11283, '7road.net': 7106,
+		        'login_user': self.__sq_login_user,
+		        'login_pwd': self.__sq_login_pwd} if where else {'baiduddt.cn': 3768,
+		                                                         'ddt1.cn': 12460,
+		                                                         'login_user': self.__ddt_login_user,
+		                                                         'login_pwd': self.__ddt_login_pwd}
 
 	def __read_file(self, fd) -> iter:
 		"""
-		处理domain.txt，解析出所需要的格式
+		处理domain.txt，解析出所需要的格
 		:param fd: 传入文件路径
 		:return: 返回，namedtuple所组成的生成器,例子：
 		domain(name='s1558.shenquol.com', tellcom='113.107.148.122', unicom='112.90.248.122')
@@ -45,6 +55,7 @@ class QYclient:
 		登陆函数，手动输入验证码。
 		:return: 返回一个处理函数，opener() 用于打开这个站点的所有链接。
 		"""
+
 		header = {
 			'Content-Type': 'application/x-www-form-urlencoded',
 			'Accept': 'application/json, text/javascript, */*',
@@ -65,8 +76,8 @@ class QYclient:
 			f.write(yz_code)
 		yz_login = input('请输入验证码：')
 		parms = {
-			'username': self.__login_user,
-			'password': self.__login_pwd,
+			'username': self.__configure['login_user'],
+			'password': self.__configure['login_pwd'],
 			'yz_login': yz_login,
 			'save_name': 1
 		}
@@ -108,7 +119,7 @@ class QYclient:
 			end = input('请输入将要在那个域名后缀中查询IP地址：')
 			rex = r'<.*name_(\w+)">(.*)<.*?>\s*<.*?>(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})<.*?>\s*<.*?>(\w{4})'
 		data = {'myzone': first, 'myaddress': address, 'mytype': '', 'mypriority': '', 'page_size': '', 'Submit': '查询'}
-		domain = 'http://dns.qycn.com/index.php?tp=domrs&domid=%d' % (self.__domid[end])
+		domain = 'http://dns.qycn.com/index.php?tp=domrs&domid=%d' % (self.__configure[end])
 		querystring = parse.urlencode(data)
 		req = request.Request(url=domain, data=querystring.encode('ascii'))
 		resp = self.__opener(req).read()
@@ -132,7 +143,8 @@ class QYclient:
 		first, end = nt[0], '.'.join(nt[-2:])
 		mapping = {'全部线路': 10, '中国联通': 2}
 		parms = {
-			'tp': 'domrs', 'ac': 'adds_a', 'action': 'a', 'domid': self.__domid[end], 'dname': first, 'vdname': first,
+			'tp': 'domrs', 'ac': 'adds_a', 'action': 'a', 'domid': self.__configure[end], 'dname': first,
+			'vdname': first,
 			'address': address, 'mtype': mapping[operator], 'mypriority': 10, 'myttl': 3600, 'submit': '新增'}
 		query = parse.urlencode(parms)
 		reqs = request.Request(self.__manage, data=query.encode('ascii'))
@@ -150,7 +162,7 @@ class QYclient:
 		"""
 		nt = name.rsplit('.', 2)
 		first, end = nt[0], '.'.join(nt[-2:])
-		p = dict(tp='domrs', ac='ajaxs_del_a', redtp='a', redid=domain_id, domid=self.__domid[end])
+		p = dict(tp='domrs', ac='ajaxs_del_a', redtp='a', redid=domain_id, domid=self.__configure[end])
 		query = parse.urlencode(p)
 		reque = request.Request(self.__manage, data=query.encode('ascii'))
 		resp = self.__opener(reque).read()
@@ -192,8 +204,31 @@ class QYclient:
 
 if __name__ == '__main__':
 	print('开始登陆群英解析站点')
-	client = QYclient()
-	while True:
+
+
+	def where():
+		while True:
+			print(
+				'''
+1. 神曲与官网：shenquol.com, ddshenqu.cn, aeonsaga.com, 7road.net
+2. 弹弹堂：baiduddt.cn, ddt1.cn
+				'''
+			)
+			try:
+				c = int(input('请输入要解析的域名 [ 1.神曲与官网|2.弹弹堂 |3.退出]: '))
+				if c == 3:
+					return False
+				elif c == 1:
+					return QYclient(where=True)
+				else:
+					return QYclient()
+			except ValueError:
+				print('输出错误，请输入对应的数字。')
+				continue
+
+
+	client = where()
+	while client:
 		new = input("请输入将要执行的操作[run|del|add|check|quit]：")
 		if new.lower() == 'quit':
 			break
