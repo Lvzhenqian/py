@@ -2,10 +2,11 @@ from hashlib import md5
 from shutil import move as mv
 import os, sys
 import threading
-import logging
+from queue import Queue
 
 class dispatcher:
 	def __init__(self, sourcefile):
+		self.q = Queue(maxsize=1000)
 		self.source = self.md5sum(sourcefile)
 		self.data = None
 		self.event = threading.Event()
@@ -29,30 +30,24 @@ class dispatcher:
 		return True
 
 	def read_date(self, path):
-		dl = []
-		for root, _, file in os.walk(path):
-			if file:
-				l = [os.path.join(root, x) for x in file]
-				dl.extend(l)
-		return dl
+		for enter in  os.scandir(path):
+			if enter.is_file():
+				self.q.put(enter.path)
+			else:
+				self.read_date(enter.path)
 
 	def producer(self):
-		data = self.read_date(r'C:\Windows\System32\drivers')
-		print(len(data))
-		index, n = 0, 1 if len(data) % 1000 else 0
-		for _ in range((len(data) // 1000) + n):
-			self.data = data[index:index + 1000]
-			with self.cond:
-				self.cond.notifyAll()
-			self.event.wait()
-			index += 1000
+		with self.cond:
+			self.read_date(r'C:\Windows\System32\drivers')
+			self.cond.notifyAll()
+		self.event.wait()
 		self.event.set()
 
 	def consumer(self):
 		while not self.event.is_set():
 			with self.cond:
 				self.cond.wait()
-				self.Do_delete(self.source, self.data)
+				self.Do_delete(self.source, self.q.get())
 
 
 if __name__ == '__main__':
