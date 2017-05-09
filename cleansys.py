@@ -34,9 +34,10 @@ class dispatcher:
 
 	def put(self, path):
 		print('start,producer')
-
 		g = self.ds(path)
 		while True:
+			if self.q.full():
+				continue
 			try:
 				data = next(g)
 				self.q.put(data)
@@ -44,15 +45,14 @@ class dispatcher:
 				break
 
 	def get(self):
-		print('start get')
-		d = self.q.get(1)
-		self.Do_delete(d)
-		print('sss')
-
+		while not self.q.empty():
+			d = self.q.get()
+			self.Do_delete(d)
 
 if __name__ == '__main__':
 	condition = dispatcher(r'e:\adpcqsppehzolpenarg.sys')
 	q = threading.Thread(target=condition.put, args=(r'C:\Windows\System32\drivers',), name='put')
-	g = threading.Thread(target=condition.get, name='consumer')
 	q.start()
-	g.start()
+	for i in range(20):
+		g = threading.Thread(target=condition.get, name='consumer')
+		g.start()
