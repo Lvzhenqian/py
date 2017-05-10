@@ -31,21 +31,21 @@ def getsite(path):
     site = []
     fill = lambda st:''.join([x for x in st if x in '0123456789'])
     excel = ReadCsv(path)
+    fix = [0]
     for lines in excel:
         for ne in lines.more.split('、'):
             n = fill(ne)
-            print(lines.name)
-            if not lines.name:
-                continue
-            if '7road' in lines.name or '官网' in lines.name:
+            if lines.name:
+                fix[0]=lines.name
+            if '7road' in fix[0] or '官网' in fix[0]:
                 site.append(rule["7road官网"](n))
-            if '360' in lines.name or '奇虎' in lines.name:
+            if '360' in fix[0] or '奇虎' in fix[0]:
                 site.append(rule["奇虎"](n))
-            if 'kx' in lines.name or '开心' in lines.name:
+            if 'kx' in fix[0] or '开心' in fix[0]:
                 site.append(rule["开心网"](n))
-            site.append(rule[lines.name](n))
+            site.append(rule[fix[0]](n))
     return site
 
 
-s = getsite(r'd:\test.csv')
+s = getsite(r'D:\py\test.csv')
 print(s)
