@@ -2,35 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1e433983-7818-4e96-b3a1-0c7e6fc7e7c3" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.ipynb_checkpoints/ccc-checkpoint.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.ipynb_checkpoints/file-checkpoint.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.ipynb_checkpoints/jp2-checkpoint.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.ipynb_checkpoints/jupyter-checkpoint.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.ipynb_checkpoints/new-checkpoint.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.ipynb_checkpoints/nn-checkpoint.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.ipynb_checkpoints/sql-checkpoint.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.ipynb_checkpoints/test-checkpoint.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.ipynb_checkpoints/作业 记录-checkpoint.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.ipynb_checkpoints/日志分析-checkpoint.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ccc.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/log/access.log-20160811" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sql.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/zuoye/.ipynb_checkpoints/SQLAlchemy-checkpoint.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/zuoye/.ipynb_checkpoints/数据库操作-checkpoint.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/zuoye/.ipynb_checkpoints/第五周作业解析-checkpoint.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/zuoye/SQLAlchemy.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/zuoye/dm/access.log" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/zuoye/dm/loga.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/zuoye/dm/ls.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/zuoye/my.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/zuoye/数据库操作.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/zuoye/第五周作业解析.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/作业 记录.ipynb" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/py.iml" afterPath="$PROJECT_DIR$/.idea/py.iml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/autoexcel.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ddt/Auto_install/DB.py" afterPath="$PROJECT_DIR$/ddt/Auto_install/DB.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -44,6 +17,7 @@
     <SUITE FILE_PATH="coverage/py$CheckBox.coverage" NAME="CheckBox Coverage Results" MODIFIED="1493958644169" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/nn" />
     <SUITE FILE_PATH="coverage/py$cleansys.coverage" NAME="cleansys Coverage Results" MODIFIED="1494337399082" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/py$py.coverage" NAME="py Coverage Results" MODIFIED="1493897659325" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/py$autoexcel.coverage" NAME="autoexcel Coverage Results" MODIFIED="1494423101721" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/py$qt3.coverage" NAME="qt3 Coverage Results" MODIFIED="1493951701514" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/nn" />
     <SUITE FILE_PATH="coverage/py$qt4.coverage" NAME="qt4 Coverage Results" MODIFIED="1493954628252" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/nn" />
     <SUITE FILE_PATH="coverage/py$test.coverage" NAME="test Coverage Results" MODIFIED="1493900258660" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -64,24 +38,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="DB.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/ddt/Auto_install/DB.py">
+      <file leaf-file-name="autoexcel.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/autoexcel.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-360">
-              <caret line="15" column="10" lean-forward="false" selection-start-line="15" selection-start-column="10" selection-end-line="15" selection-end-column="10" />
+            <state relative-caret-position="357">
+              <caret line="17" column="0" lean-forward="true" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
               <folding>
-                <element signature="e#14#50#0" expanded="true" />
+                <element signature="e#15#25#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AgentUpgrade.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/AgentUpgrade.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2711">
-              <caret line="6" column="66" lean-forward="false" selection-start-line="6" selection-start-column="50" selection-end-line="6" selection-end-column="66" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -122,6 +86,7 @@
         <option value="$PROJECT_DIR$/ddt/Auto_install/DB.py" />
         <option value="$PROJECT_DIR$/zy/StrToInt.py" />
         <option value="$PROJECT_DIR$/zy/zy2.py" />
+        <option value="$PROJECT_DIR$/autoexcel.py" />
       </list>
     </option>
   </component>
@@ -155,6 +120,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -170,7 +136,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -195,26 +160,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.cleansys">
-    <configuration default="false" name="qt3" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/nn" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="py" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/nn/qt3.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="Python.autoexcel">
     <configuration default="false" name="qt4" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -286,6 +232,25 @@
       <module name="py" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/cleansys.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="autoexcel" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="py" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/autoexcel.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -460,19 +425,19 @@
     </configuration>
     <list size="6">
       <item index="0" class="java.lang.String" itemvalue="Python.py" />
-      <item index="1" class="java.lang.String" itemvalue="Python.qt3" />
-      <item index="2" class="java.lang.String" itemvalue="Python.qt4" />
-      <item index="3" class="java.lang.String" itemvalue="Python.CheckBox" />
-      <item index="4" class="java.lang.String" itemvalue="Python.FileDialog" />
-      <item index="5" class="java.lang.String" itemvalue="Python.cleansys" />
+      <item index="1" class="java.lang.String" itemvalue="Python.qt4" />
+      <item index="2" class="java.lang.String" itemvalue="Python.CheckBox" />
+      <item index="3" class="java.lang.String" itemvalue="Python.FileDialog" />
+      <item index="4" class="java.lang.String" itemvalue="Python.cleansys" />
+      <item index="5" class="java.lang.String" itemvalue="Python.autoexcel" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.cleansys" />
-        <item index="1" class="java.lang.String" itemvalue="Python.FileDialog" />
-        <item index="2" class="java.lang.String" itemvalue="Python.CheckBox" />
-        <item index="3" class="java.lang.String" itemvalue="Python.qt4" />
-        <item index="4" class="java.lang.String" itemvalue="Python.qt3" />
+        <item index="0" class="java.lang.String" itemvalue="Python.autoexcel" />
+        <item index="1" class="java.lang.String" itemvalue="Python.cleansys" />
+        <item index="2" class="java.lang.String" itemvalue="Python.FileDialog" />
+        <item index="3" class="java.lang.String" itemvalue="Python.CheckBox" />
+        <item index="4" class="java.lang.String" itemvalue="Python.qt4" />
       </list>
     </recent_temporary>
   </component>
@@ -503,8 +468,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-4" y="-4" width="1688" height="1014" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17359413" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17542787" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32867134" sideWeight="0.50428265" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -566,23 +532,10 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/AgentUpgrade.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6573">
-          <caret line="313" column="30" lean-forward="false" selection-start-line="313" selection-start-column="30" selection-end-line="313" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cleansys.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#23#0" expanded="false" />
-            <marker date="1494379334887" expanded="true" signature="735:762" ph="..." />
-            <marker date="1494379334887" expanded="true" signature="1273:1283" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -598,11 +551,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#23#0" expanded="false" />
-            <marker date="1494379334887" expanded="true" signature="735:762" ph="..." />
-            <marker date="1494379334887" expanded="true" signature="1273:1283" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -618,11 +566,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#23#0" expanded="false" />
-            <marker date="1494379334887" expanded="true" signature="735:762" ph="..." />
-            <marker date="1494379334887" expanded="true" signature="1273:1283" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -903,11 +846,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="396">
           <caret line="43" column="32" lean-forward="false" selection-start-line="43" selection-start-column="32" selection-end-line="43" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#23#0" expanded="false" />
-            <marker date="1494379334887" expanded="true" signature="735:762" ph="..." />
-            <marker date="1494379334887" expanded="true" signature="1273:1283" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -915,40 +853,35 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/zy/StrToInt.py" />
+    <entry file="file://$PROJECT_DIR$/zy/zy2.py" />
+    <entry file="file://$PROJECT_DIR$/ddt/Auto_install/DB.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="21">
+          <caret line="15" column="10" lean-forward="false" selection-start-line="15" selection-start-column="10" selection-end-line="15" selection-end-column="10" />
+          <folding>
+            <element signature="e#14#50#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/AgentUpgrade.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2711">
+        <state relative-caret-position="21">
           <caret line="6" column="66" lean-forward="false" selection-start-line="6" selection-start-column="50" selection-end-line="6" selection-end-column="66" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/zy/StrToInt.py">
+    <entry file="file://$PROJECT_DIR$/autoexcel.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="125" column="0" lean-forward="false" selection-start-line="125" selection-start-column="0" selection-end-line="125" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/zy/zy2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="753">
-          <caret line="65" column="0" lean-forward="true" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ddt/Auto_install/DB.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-360">
-          <caret line="15" column="10" lean-forward="false" selection-start-line="15" selection-start-column="10" selection-end-line="15" selection-end-column="10" />
+        <state relative-caret-position="357">
+          <caret line="17" column="0" lean-forward="true" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
           <folding>
-            <element signature="e#14#50#0" expanded="true" />
+            <element signature="e#15#25#0" expanded="true" />
           </folding>
         </state>
       </provider>
