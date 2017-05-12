@@ -41,11 +41,14 @@ class QYclient:
 		with open(fd, 'rt', encoding='utf8') as f:
 			namelist, tup = [], []
 			dic = namedtuple('domain', ['name', 'tellcom', 'unicom'])
+			o = re.compile(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}')
 			for line in f:
-				if line.startswith(('assist', 's', 'res')):
+				domain = '.'.join(line.strip().rsplit('.', 2)[-2:])
+				ip = o.findall(line)
+				if domain in self.__configure.keys():
 					namelist.append(line.strip())
-				if line[0].isdigit() and not '_' in line:
-					tell, uni = line.split()
+				if ip:
+					tell, uni = ip
 					tup.append([dic(x, tell, uni) for x in namelist])
 					namelist.clear()
 		return (j for n in range(len(tup)) for j in tup[n])
@@ -178,6 +181,9 @@ class QYclient:
 		:return: 返回添加的总结果字符串
 		"""
 		it = self.__read_file('./domain.txt')
+		if not it:
+			print('domain.txt 解析错误，请重试！')
+			return
 		successful, fail = 0, 0
 		for nametp in it:
 			telcheck = self.checker(nametp.name, nametp.tellcom)
