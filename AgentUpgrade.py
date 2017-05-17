@@ -10,7 +10,7 @@ from zipfile import ZipFile
 
 
 class Agent:
-    Install_Path = r'c:\windows\7roadyw\agent'
+    Install_Path = r'c:\7roadyw\agent'
 
     def __init__(self):
         self.__ip = 'http://ip.7road.net'
@@ -18,7 +18,7 @@ class Agent:
         self.__Agent = 'http://fe.open-falcon.7road.net:9526/windows/agent.zip'
         self.AgentMd5 = 'http://fe.open-falcon.7road.net:9526/windows/md5.txt'
         self.__AgentManage = 'http://fe.open-falcon.7road.net:9526/windows/AgentUpgrade.exe'
-        self.__Manage_Path = os.path.join(r'c:\windows\7roadyw', 'AgentUpgrade.exe')
+        self.__Manage_Path = os.path.join(r'c:\7roadyw', 'AgentUpgrade.exe')
         self.__Download_Path = r'C:\falcon_agent'
         self.__Download_File = r'C:\falcon_agent\agent.zip'
         self.__Backup_Path = self.Install_Path + '_%s' % time.strftime('%Y-%m-%d')
