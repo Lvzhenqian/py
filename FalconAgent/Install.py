@@ -1,12 +1,13 @@
 # coding:utf-8
+from .util import config
 from urllib import request, parse, error
 from subprocess import Popen, PIPE, DEVNULL, STARTUPINFO, STARTF_USESHOWWINDOW
-from threading import Thread
 from platform import machine, release
 from shutil import move, rmtree
 import socket, requests, json, time, os, logging, win32serviceutil
 from hashlib import md5 as md5sum
 from zipfile import ZipFile
+
 
 
 class Agent:
@@ -214,110 +215,3 @@ class Agent:
 				env=os.environ
 			).stdout
 			return logging.info(ret.read())
-
-
-class PlugManage:
-	def __init__(self):
-		self.path = os.path.join(Agent.Install_Path, 'plugin')
-
-	@staticmethod
-	def Plugin(x: str):
-		with open(x, 'rt', encoding='utf8') as f:
-			code = f.read()
-		if 'subprocess' in code and 'STARTF_USESHOWWINDOW' not in code:
-			logging.error(
-				"""
-        [{}] Plugin 
-        this Plugin in use subprocess module,
-        But it not used [startupinfo] parameters in Popen function.it can't running.
-        you need to change (stdin,stdout,stderr) to PIPE or DEVNULL
-        add env=os.environ.
-        
-        example:
-            si = subprocess.STARTUPINFO()
-            si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-            subprocess.Popen(startupinfo=si,env=os.environ,
-            stderr=subprocess.DEVNULL, stdout=subprocess.PIPE, stdin=subprocess.DEVNULL,
-            )
-                """.format(os.path.basename(x)))
-			return False
-		ret = {'metric': None}
-		exec(code, ret)
-		return ret['metric']
-
-	def PushVaule(self, parmlist: list):
-		if not parmlist:
-			return logging.error('Not Any Metric Push Please try again!')
-		url = 'http://127.0.0.1:1988/v1/push'
-		req = requests.post(url, data=json.dumps(parmlist))
-		if req.text.strip() == 'success':
-			return logging.info('Push {} Metric Successful.'.format(len(parmlist)))
-		else:
-			return logging.warning('Push All Fail.')
-
-	def Start(self):
-		if not os.path.exists(self.path):
-			return logging.error('Not {} this Plugin Folder.Push exit!'.format(self.path))
-		parms = []
-		files = [os.path.join(self.path, x) for x in os.listdir(self.path) if x.endswith('.py')]
-		for file in files:
-			try:
-				data = self.Plugin(file)
-			except AttributeError:
-				data = False
-			if data:
-				logging.info("Starting...Add [{}] Plugin in the metric list.".format(os.path.basename(file)))
-				if isinstance(data, dict):
-					parms.append(data)
-				elif isinstance(data, list):
-					parms.extend(data)
-			else:
-				logging.error("Error,Can't include the [{}] Plugin.".format(os.path.basename(file)))
-		logging.info("Starting..Push the metric list")
-		if parms:
-			self.PushVaule(parms)
-		return
-
-
-def Check():
-	agent = Agent()
-	md5file = None
-	try:
-		with request.urlopen(agent.AgentMd5) as f:
-			md5file = f.read()
-			server_md5 = md5sum(md5file).hexdigest()
-		file = os.path.join(agent.Install_Path, 'md5.txt')
-		if os.path.exists(file):
-			with open(file, 'rb') as fd:
-				file_md5 = md5sum(fd.read()).hexdigest()
-			if file_md5 == server_md5:
-				return logging.info("Same file don't use Update...exit. ")
-	except error.HTTPError:
-		logging.error("Can not Client %s the Url." % agent.AgentMd5)
-	t = Thread(target=agent.Download_Package, args=(md5file,), name='Download')
-	t.start()
-	t.join()
-
-
-if __name__ == '__main__':
-	logging.basicConfig(level=logging.INFO,
-	                    format='%(asctime)s --[%(process)s %(processName)s]--[%(threadName)10s]--[%(levelname)7s]: %('
-	                           'message)s',
-	                    filename='cron.log',
-	                    filemode='a')
-	logging.info('Start')
-	logging.info('Start Checking')
-	Check()
-	logging.info('End Checking')
-	logging.info('Start TaskCheck')
-	Agent.Tasks('FalconAgent')
-	logging.info('End TaskCheck')
-	logging.info('Start Send Metric')
-	n = 0
-	while n < 5:
-		if Agent.TestPort(1988):
-			PlugManage().Start()
-			break
-		n += 1
-	logging.info('End Send Metric')
-	logging.info('End.\r\n')

@@ -9,7 +9,7 @@ def opt():
         '--port', '-p',
         nargs='*',
         dest='port',
-        help='connect to port'
+        help='Client to port'
     )
     return options.parse_args()
 

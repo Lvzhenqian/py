@@ -12,7 +12,7 @@ class PythonService(win32serviceutil.ServiceFramework):
 		self.hWaitStop = win32event.CreateEvent(None, 0, 0, None)
 
 	def SvcDoRun(self):
-		with open(r'd:\test.txt', 'w', encoding='utf8') as fd:
+		with open(r'c:\test.txt', 'w', encoding='utf8') as fd:
 			while self.flag:
 				fd.writelines(time.strftime('%H:%M:%S')+'\n')
 				time.sleep(5)
