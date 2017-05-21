@@ -1,6 +1,11 @@
 {
     "debug": true,
     "hostname": "win-test-agent",
+    "version":2,
+    "Plugin":{
+      "version":1,
+      "folder": "plugin"
+    },
     "ip": "",
     "heartbeat": {
         "enabled": true,

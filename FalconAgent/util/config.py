@@ -9,11 +9,13 @@ try:
 except Exception as e:
 	logging.error(e)
 
-HOSTNAME = config['hostname']
-DEBUG = config['debug']
-IP = config['ip']
-HEARTBEAT = config['heartbeat']
-TRANSFER = config['transfer']
-HTTP = config['http']
-COLLECTOR = config['collector']
-IGNORE = config['ignore']
+HOSTNAME = config.get('hostname')
+DEBUG = config.get('debug')
+IP = config.get('ip')
+HEARTBEAT = config.get('heartbeat')
+TRANSFER = config.get('transfer')
+HTTP = config.get('http')
+COLLECTOR = config.get('collector')
+IGNORE = config.get('ignore')
+VERSION = config.get('version')
+PLUGIN = config.get('Plugin')
