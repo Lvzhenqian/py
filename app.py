@@ -54,4 +54,4 @@ def test_push():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',port=5001,debug=True)
+    app.Download_And_Install(host='0.0.0.0', port=5001, debug=True)

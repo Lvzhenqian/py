@@ -1,4 +1,4 @@
-from .Install import *
+from FalconAgent.AutoUpdate.Install import *
 from .util.log import *
 
 

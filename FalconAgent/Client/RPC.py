@@ -13,7 +13,7 @@ class client:
 			yield n
 			n += 1
 
-	def SendMetric(self,name, data):
+	def SendMetric(self, name, data: list):
 		sender = dict(id=next(self.count), method=name, params=[data])
 		s_id = sender.get('id')
 		mesg = json.dumps(sender).encode()

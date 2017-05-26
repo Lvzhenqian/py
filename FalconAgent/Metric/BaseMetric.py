@@ -145,7 +145,7 @@ def collect():
 	data = [x for x in payload if x.get('metric') not in IGNORE]
 
 	try:
-		result = UpdateMetric(payload)
+		result = UpdateMetric(data)
 	except Exception as err:
 		logging.error(err)
 	else:
