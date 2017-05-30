@@ -3,10 +3,6 @@
     "hostname": "win-test-agent",
     "InstallPath":"C:\\7roadyw\\agent",
     "version":2,
-    "Plugin":{
-      "version":1,
-      "folder": "plugin"
-    },
     "ip": "",
     "heartbeat": {
         "enabled": true,

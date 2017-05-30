@@ -1,14 +1,12 @@
 from ..util.config import *
 from ..Client.HbsClient import Update
-import time
+from ..util.thread import Jobs
 
-def report(sleep=60):
-	data = dict(Hostname=HOSTNAME,IP=IP,AgentVersion=str(VERSION),PluginVersion=str(PLUGIN.get('version')))
-	while True:
-		try:
-			Update(data)
-		except Exception as err:
-			logging.error(err)
-			continue
-		finally:
-			time.sleep(sleep)
+
+@Jobs.scheduled_job(trigger='interval', id='HbsRepo', minutes=1)
+def report():
+	data = dict(Hostname=HOSTNAME, IP=IP, AgentVersion=str(VERSION), PluginVersion='enable')
+	try:
+		Update(data)
+	except Exception as err:
+		logging.error(err)

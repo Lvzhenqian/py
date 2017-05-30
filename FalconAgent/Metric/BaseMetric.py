@@ -1,8 +1,19 @@
-from ..util.log import *
-import psutil, time, copy
+import copy
+import psutil
+import time
+
 from ..Client.TransClient import UpdateMetric
+from ..util.log import *
+from ..util.thread import Jobs
 
 
+def is_interface_ignore(key):
+	for ignore_key in COLLECTOR['ifacePrefixIgnore']:
+		if ignore_key in key.decode('gbk'):
+			return True
+
+
+@Jobs.scheduled_job(trigger='interval', id='BaseMetric', minutes=1)
 def collect():
 	logging.debug('基础数据提交')
 	time_now = int(time.time())
@@ -150,19 +161,3 @@ def collect():
 		logging.error(err)
 	else:
 		logging.info(result)
-
-
-def is_interface_ignore(key):
-	for ignore_key in COLLECTOR['ifacePrefixIgnore']:
-		if ignore_key in key.decode('gbk'):
-			return True
-
-
-def basic_collect(period):
-	logging.debug('prepare collect basic data')
-	while True:
-		try:
-			collect()
-		except Exception as e:
-			logging.error(e, exc_info=True)
-		time.sleep(period)

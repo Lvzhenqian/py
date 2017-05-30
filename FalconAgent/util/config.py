@@ -1,7 +1,7 @@
 import json, os, logging
-PATH = os.path.realpath(__file__)
-logging.debug(PATH)
-cfg_file = os.path.join(PATH, 'cfg.json')
+
+SCRIPTPATH = os.path.dirname(os.path.realpath(__file__))
+cfg_file = os.path.join(SCRIPTPATH, 'cfg.json')
 config = None
 try:
 	with open(cfg_file) as confile:
@@ -18,5 +18,5 @@ HTTP = config.get('http')
 COLLECTOR = config.get('collector')
 IGNORE = config.get('ignore')
 VERSION = config.get('version')
-PLUGIN = config.get('Plugin')
 INSTALL = config.get('InstallPath')
+PLUGIN = os.path.join(SCRIPTPATH, 'plugin')

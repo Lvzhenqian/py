@@ -1,7 +1,14 @@
 from ..AutoUpdate.Install import *
 from threading import Thread
+from ..PluginManage.Manage import JobsManage
+from ..api.HttpAPI import *
+from apscheduler.schedulers.background import BackgroundScheduler
+
+Jobs = BackgroundScheduler()
+JobsManage(PLUGIN)
 
 
+@Jobs.scheduled_job(trigger='interval', id='Install', minutes=5)
 def InstallThread():
 	md5file = None
 	ins = Upgrade()
@@ -16,7 +23,13 @@ def InstallThread():
 			if file_md5 == server_md5:
 				return logging.info("Md5验证通过，跳过更新！ ")
 	except error.HTTPError:
-		logging.error("Can not Client %s the Url." % ins.AgentMd5)
-	t = Thread(target=ins.Download_And_Install, args=(md5file,), name='更新线程')
+		logging.error("无法连接到： %s" % ins.AgentMd5)
+	t = Thread(target=ins.Download_And_Install, args=(md5file,), name='更新线程', daemon=True)
+	logging.info('{}--{}'.format(t.name, t.ident))
+	t.start()
+
+
+def APIthread():
+	t = Thread(target=app.run, kwargs=dict(port=1988), name='API接口线程', daemon=True)
 	logging.info('{}--{}'.format(t.name, t.ident))
 	t.start()
