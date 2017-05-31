@@ -7,9 +7,11 @@ import socket, json, time, os, win32serviceutil, psutil
 from hashlib import md5 as md5sum
 from zipfile import ZipFile
 
-
-logging.basicConfig(filename='Install.log', level=logging.INFO,
-					format='%(asctime)s %(filename)-12s %(levelname)-8s %(message)s')
+console = logging.StreamHandler()
+console.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s --[%(threadName)10s]--[%(levelname)7s]: %(message)s')
+console.setFormatter(formatter)
+logging.getLogger('').addHandler(console)
 
 
 class Upgrade:
@@ -111,7 +113,7 @@ class Upgrade:
 
 	def __services_manage(self, action, service='falconagent'):
 		rule = {'stop': win32serviceutil.StopService, 'start': win32serviceutil.StartService,
-				'restart': win32serviceutil.RestartService}
+		        'restart': win32serviceutil.RestartService}
 		if action == 'status':
 			try:
 				s = psutil.win_service_get(service)

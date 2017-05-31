@@ -1,6 +1,19 @@
-import time
-with open(r'c:\test.txt','wt',encoding='utf8') as f:
-	while True:
-		f.writelines(time.strftime('%Y:%m:%d %H:%M:%S')+'\r\n')
-		time.sleep(5)
-		f.flush()
+import logging
+
+
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
+                    datefmt='%a,%d %b %Y %H:%M:%S',
+                    filename=r'd:\test.log',
+                    filemode='w')
+
+
+console = logging.StreamHandler()
+console.setLevel(logging.INFO)
+formatter = logging.Formatter('%(name)-12s: %(levelname)-8s %(message)s')
+console.setFormatter(formatter)
+logging.getLogger('').addHandler(console)
+
+logging.debug('This is debug message')
+logging.info('This is info message')
+logging.warning('This is warning message')

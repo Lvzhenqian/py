@@ -3,7 +3,7 @@ import psutil
 import time
 
 from ..Client.TransClient import UpdateMetric
-from ..util.log import *
+from ..util.config import *
 from ..util.thread import Jobs
 
 

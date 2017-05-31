@@ -1,5 +1,4 @@
-# from ..util.config import *
-from ..util.log import *
+from ..util.config import *
 from ..Client.TransClient import UpdateMetric
 from ..util.thread import Jobs
 
@@ -39,7 +38,7 @@ class JobsManage:
 		except AttributeError:
 			data = False
 		if data:
-			logging.info("Starting...Add [{}] Plugin in the metric list.".format(os.path.basename(file)))
+			logging.debug("Starting...Add [{}] Plugin in the metric list.".format(os.path.basename(file)))
 			if isinstance(data, dict):
 				parms.append(data)
 			elif isinstance(data, list):
