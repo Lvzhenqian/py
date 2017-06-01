@@ -1,6 +1,6 @@
-from ..util.config import *
-from ..Client.HbsClient import Update
-from ..util.thread import Jobs
+from FalconAgent.util.config import *
+from FalconAgent.Client.HbsClient import Update
+from FalconAgent.util.thread import Jobs
 
 
 @Jobs.scheduled_job(trigger='interval', id='HbsRepo', minutes=1)

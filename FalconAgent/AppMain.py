@@ -1,6 +1,5 @@
-from .util.thread import Jobs
-from .util.config import *
-
+from FalconAgent.util.thread import Jobs
+from FalconAgent.util.config import *
 
 def main():
 	logging.debug('开始作业：{}'.format(Jobs.get_job()))

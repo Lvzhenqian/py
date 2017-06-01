@@ -2,6 +2,7 @@ import json, os, logging
 
 SCRIPTPATH = os.path.dirname(os.path.realpath(__file__))
 cfg_file = os.path.join(SCRIPTPATH, 'cfg.json')
+logging.debug(cfg_file)
 config = None
 try:
 	with open(cfg_file) as confile:

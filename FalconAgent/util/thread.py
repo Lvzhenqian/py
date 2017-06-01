@@ -1,7 +1,7 @@
 from ..AutoUpdate.Install import *
 from threading import Thread
-from ..PluginManage.Manage import JobsManage
-from ..api.HttpAPI import *
+from FalconAgent.PluginManage.Manage import JobsManage
+from FalconAgent.api.HttpAPI import *
 from apscheduler.schedulers.background import BackgroundScheduler
 
 Jobs = BackgroundScheduler()

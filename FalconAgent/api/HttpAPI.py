@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from ..Client.TransClient import *
+from FalconAgent.Client.TransClient import *
 
 app = Flask(__name__)
 

@@ -1,5 +1,5 @@
-from .RPC import client
-from ..util.config import *
+from FalconAgent.Client.RPC import client
+from FalconAgent.util.config import *
 
 ADDRS = HEARTBEAT.get('addr')
 

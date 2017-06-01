@@ -1,6 +1,6 @@
-from ..util.config import *
-from ..Client.TransClient import UpdateMetric
-from ..util.thread import Jobs
+from FalconAgent.util.config import *
+from FalconAgent.Client.TransClient import UpdateMetric
+from FalconAgent.util.thread import Jobs
 
 
 class JobsManage:

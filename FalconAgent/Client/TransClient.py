@@ -1,5 +1,5 @@
-from ..util.config import *
-from .RPC import client
+from FalconAgent.util.config import *
+from FalconAgent.Client.RPC import client
 
 ADDRS = TRANSFER['addrs']
 
