@@ -5,7 +5,8 @@ from ..api.HttpAPI import *
 from apscheduler.schedulers.background import BackgroundScheduler
 
 Jobs = BackgroundScheduler()
-JobsManage(PLUGIN)
+Plugin = JobsManage(PLUGIN)
+Plugin.make_jobs()
 
 
 @Jobs.scheduled_job(trigger='interval', id='Install', minutes=5)
