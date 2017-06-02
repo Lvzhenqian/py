@@ -1,4 +1,4 @@
-from ..AutoUpdate.Install import *
+from FalconAgent.AutoUpdate.Install import *
 from threading import Thread
 from FalconAgent.PluginManage.Manage import JobsManage
 from FalconAgent.api.HttpAPI import *

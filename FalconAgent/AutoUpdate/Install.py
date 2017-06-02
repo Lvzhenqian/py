@@ -1,5 +1,5 @@
 # coding:utf-8
-from ..util.config import *
+from FalconAgent.util.config import *
 from urllib import request, parse, error
 from platform import machine
 from shutil import move, rmtree

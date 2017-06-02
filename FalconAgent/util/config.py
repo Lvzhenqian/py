@@ -1,7 +1,11 @@
-import json, os, logging
-
-SCRIPTPATH = os.path.dirname(os.path.realpath(__file__))
+import json
+import logging
+import os
+import sys
+SCRIPTPATH = r'D:\py\FalconAgent'
+# SCRIPTPATH = os.path.dirname(os.path.realpath(sys.executable))
 cfg_file = os.path.join(SCRIPTPATH, 'cfg.json')
+print(cfg_file)
 logging.debug(cfg_file)
 config = None
 try:
