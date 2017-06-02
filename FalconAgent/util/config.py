@@ -4,7 +4,7 @@ import os
 import sys
 
 SCRIPTPATH = r'D:\FalconAgent'
-#SCRIPTPATH = os.path.dirname(os.path.realpath(sys.executable))
+# SCRIPTPATH = os.path.dirname(os.path.realpath(sys.executable))
 cfg_file = os.path.join(SCRIPTPATH, 'cfg.json')
 print(cfg_file)
 logging.debug(cfg_file)
@@ -28,8 +28,8 @@ INSTALL = config.get('InstallPath')
 PLUGIN = os.path.join(SCRIPTPATH, 'plugin')
 
 if DEBUG:
-    logging.basicConfig(filename='app-dbg.log', level=logging.DEBUG, filemode='a',
+    logging.basicConfig(filename=os.path.join(SCRIPTPATH, 'app-dbg.log'), level=logging.DEBUG, filemode='a',
                         format='%(asctime)s --[%(threadName)10s]--[%(levelname)7s]: %(message)s')
 else:
-    logging.basicConfig(level=logging.INFO, filename='app.log', filemode='a',
+    logging.basicConfig(level=logging.INFO, filename=os.path.join(SCRIPTPATH, 'app.log'), filemode='a',
                         format='%(asctime)s --[%(threadName)10s]--[%(levelname)7s]: %(message)s')
