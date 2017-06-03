@@ -1,5 +1,5 @@
 # coding:utf-8
-from util.config import *
+from util.config import Geloger,INSTALL,DEBUG
 from urllib import request, parse, error
 from platform import machine
 from shutil import move, rmtree
@@ -7,7 +7,7 @@ import socket, json, time, os, win32serviceutil, psutil
 from hashlib import md5 as md5sum
 from zipfile import ZipFile
 
-Geloger(name='AutoUpdate.install', file='install.log', debug=DEBUG)
+install_log = Geloger(name='AutoUpdate.install', file='install.log', debug=DEBUG)
 
 
 class Upgrade:
@@ -28,20 +28,20 @@ class Upgrade:
                 dit = r.read()
             fdit = json.loads(dit)
             fdit['hostname'] = ip
-            logging.info('更改 hostname=%s ' % ip)
+            install_log.info('更改 hostname=%s ' % ip)
             wf = os.path.join(self.__Download_Path, r'agent\cfg.json')
-            logging.info('write to source file!')
+            install_log.info('write to source file!')
             with open(wf, mode='wt', encoding='utf8') as w:
                 wbody = json.dumps(fdit)
                 w.write(wbody)
-            logging.info('更改cfg.json文件成功.')
+            install_log.info('更改cfg.json文件成功.')
             return True
         except FileNotFoundError:
-            logging.error('找不到cfg.json文件!')
+            install_log.error('找不到cfg.json文件!')
             return False
 
     def __SelectIp(self):
-        logging.info('选择IP 与 cfg.json文件')
+        install_log.info('选择IP 与 cfg.json文件')
         try:
             internet = request.urlopen(self.__ip).read().split()
             net, we = internet[0].decode(), internet[1]
@@ -68,32 +68,32 @@ class Upgrade:
         try:
             if not os.path.isdir(self.__Download_Path):
                 os.mkdir(self.__Download_Path)
-            logging.info('下载更新包！')
+            install_log.info('下载更新包！')
             agent = request.urlopen(self.__Agent).read()
             with open(self.__Download_File, 'wb') as f:
                 f.write(agent)
-            logging.info("比对下载包的Md5值。")
+            install_log.info("比对下载包的Md5值。")
             with open(self.__Download_File, 'rb') as ff:
                 down_md5 = md5sum(ff.read())
             if s_md5.split()[0].decode() == down_md5.hexdigest():
-                logging.info('开始安装更新！')
+                install_log.info('开始安装更新！')
                 install_status = self.__Install(self.__Download_File, self.__Download_Path)
                 if install_status:
-                    logging.info('下载Md5.txt文件')
+                    install_log.info('下载Md5.txt文件')
                     request.urlretrieve(self.AgentMd5, os.path.join(self.Install_Path, 'md5.txt'))
                 else:
                     return False
-                logging.info('清理临时目录！')
+                install_log.info('清理临时目录！')
                 rmtree(self.__Download_Path)
-                return logging.info('安装 更新包完成！')
+                return install_log.info('安装 更新包完成！')
             else:
-                return logging.warning('下载出错！请手动下载更新包，地址：%s' % self.__Agent)
+                return install_log.warning('下载出错！请手动下载更新包，地址：%s' % self.__Agent)
 
         except error.HTTPError:
-            return logging.error("无法下载，请检查网络！地址：%s" % self.__Agent)
+            return install_log.error("无法下载，请检查网络！地址：%s" % self.__Agent)
 
     def __AddService(self):
-        logging.info('加入系统服务.')
+        install_log.info('加入系统服务.')
         os.system(r'{server} install FalconAgent {exe}'.format(
             server=os.path.join(
                 self.Install_Path, 'nssm64.exe') if machine() == 'AMD64' else os.path.join(
@@ -104,7 +104,7 @@ class Upgrade:
         try:
             self.__services_manage('start')
         except Exception as e:
-            logging.error(e)
+            install_log.error(e)
         return True
 
     def __services_manage(self, action, service='falconagent'):
@@ -115,57 +115,57 @@ class Upgrade:
                 s = psutil.win_service_get(service)
                 return s.status()
             except Exception as err:
-                return logging.error(err)
+                return install_log.error(err)
         else:
             return rule.get(action, 'restart')(service)
 
     def __Install(self, x: str, ds: str):
-        logging.info('解压，请等待！')
+        install_log.info('解压，请等待！')
         f = ZipFile(x, mode='r')
         f.extractall(ds)
         # 更改IP文件
-        logging.info('开始安装客户端！')
+        install_log.info('开始安装客户端！')
         ip, addr = self.__SelectIp()
         Change = self.__ChangeFile(ip, addr)
         if not Change:
-            logging.error("修改cfg.json文件错误，请检查cfg.json文件！")
+            install_log.error("修改cfg.json文件错误，请检查cfg.json文件！")
             return False
         # 开始安装
         if not os.path.isdir(self.Install_Path):  # 没有此目录时
-            logging.info('安装到： %s' % self.Install_Path)
+            install_log.info('安装到： %s' % self.Install_Path)
             move(os.path.join(self.__Download_Path, 'agent'), self.Install_Path)
             self.__AddService()
 
         elif self.__services_manage('status') == 'running':  # 当服务存在时
             try:
-                logging.info('停止服务中')
+                install_log.info('停止服务中')
                 self.__services_manage('stop')
                 time.sleep(3)
                 if not os.path.exists(self.__Backup_Path):  # 检查备份路径是否已经存在
-                    logging.info('备份到：{}'.format(self.__Backup_Path))
+                    install_log.info('备份到：{}'.format(self.__Backup_Path))
                     move(self.Install_Path, self.__Backup_Path)
-                logging.info('开始更新文件...')
+                install_log.info('开始更新文件...')
                 move(os.path.join(self.__Download_Path, 'agent'), self.Install_Path)
-                logging.info('启动服务！')
+                install_log.info('启动服务！')
                 self.__services_manage('start')
             except Exception as err:
-                logging.error(err)
+                install_log.error(err)
                 return False
 
         else:  # 当有目录，但是无服务，或者服务没有启动时。
-            logging.info('备份到：{}'.format(self.__Backup_Path))
+            install_log.info('备份到：{}'.format(self.__Backup_Path))
             try:
                 if not os.path.exists(self.__Backup_Path):
-                    logging.info('Backup File to {}'.format(self.__Backup_Path))
+                    install_log.info('Backup File to {}'.format(self.__Backup_Path))
                     move(self.Install_Path, self.__Backup_Path)
-                logging.info('开始更新文件...')
+                install_log.info('开始更新文件...')
                 move(os.path.join(self.__Download_Path, 'agent'), self.Install_Path)
                 if self.__services_manage('status') == 'stopped':
                     try:
                         self.__services_manage('start')
                     except Exception as err:
-                        logging.error(err)
+                        install_log.error(err)
                 else:
                     self.__AddService()
             except Exception as err:
-                logging.error(err)
+                install_log.error(err)

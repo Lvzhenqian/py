@@ -3,14 +3,14 @@ from threading import Thread
 from PluginManage.Manage import JobsManage
 from api import HttpAPI
 from apscheduler.schedulers.background import BackgroundScheduler
-from util.config import *
+from util.config import Geloger,DEBUG,PLUGIN
 from Metric.BaseMetric import collect
 from Metric.Repo import report
 
 Jobs = BackgroundScheduler()
 Plugin = JobsManage(PLUGIN)
 Plugin.make_jobs()
-Geloger(name='util.thread', file='app.log', debug=DEBUG)
+thread_log = Geloger(name='util.thread', file='app.log', debug=DEBUG)
 
 
 @Jobs.scheduled_job(trigger='interval', id='UpdataThread', minutes=5)
@@ -26,17 +26,17 @@ def UpdataThread():
             with open(file, 'rb') as fd:
                 file_md5 = md5sum(fd.read()).hexdigest()
             if file_md5 == server_md5:
-                return logging.info("Md5验证通过，跳过更新！ ")
+                return thread_log.info("Md5验证通过，跳过更新！ ")
     except error.HTTPError:
-        logging.error("无法连接到： %s" % ins.AgentMd5)
+        thread_log.error("无法连接到： %s" % ins.AgentMd5)
     t = Thread(target=ins.Download_And_Install, args=(md5file,), name='更新线程', daemon=True)
-    logging.info('{}--{}'.format(t.name, t.ident))
+    thread_log.info('{}--{}'.format(t.name, t.ident))
     t.start()
 
 
 def APIthread():
     t = Thread(target=HttpAPI.app.run, kwargs=dict(port=1988), name='API接口线程', daemon=True)
-    logging.info('{}--{}'.format(t.name, t.ident))
+    thread_log.info('{}--{}'.format(t.name, t.ident))
     t.start()
 
 

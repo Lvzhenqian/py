@@ -1,9 +1,9 @@
 from flask import Flask, request, jsonify
 from Client import TransClient
-from util.config import *
+from util.config import Geloger,DEBUG
 
 app = Flask(__name__)
-Geloger(name='api.HttpAPI', file='app.log', debug=DEBUG)
+api_log = Geloger(name='api.HttpAPI', file='app.log', debug=DEBUG)
 
 
 @app.route('/health', methods=['GET'])
@@ -14,13 +14,13 @@ def health():
 @app.route('/v1/push', methods=['POST'])
 def Push_Metric_By_Youreself():
     rep = False
-    logging.info('自定义数据上传接口')
+    api_log.info('自定义数据上传接口')
     try:
         data = request.get_json()
         rep = TransClient.UpdateMetric(data)
     except Exception as err:
-        logging.error(err)
+        api_log.error(err)
         return jsonify('fail')
     if rep:
-        logging.info('上传成功：{}'.format(rep))
+        api_log.info('上传成功：{}'.format(rep))
         return jsonify('successful')

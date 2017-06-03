@@ -1,8 +1,9 @@
-from util.config import *
+import os
+from util.config import Geloger, DEBUG
 from Client.TransClient import UpdateMetric
 from util import thread
 
-Geloger(name='PluginManage.Mange', file='app.log', debug=DEBUG)
+manage_log = Geloger(name='PluginManage.Mange', file='app.log', debug=DEBUG)
 
 
 class JobsManage:
@@ -13,7 +14,7 @@ class JobsManage:
         with open(x, 'rt', encoding='utf8') as f:
             code = f.read()
         if 'subprocess' in code and 'STARTF_USESHOWWINDOW' not in code:
-            logging.error(
+            manage_log.error(
                 """
 		[{}] Plugin 
 		this Plugin in use subprocess module,
@@ -40,16 +41,16 @@ class JobsManage:
         except AttributeError:
             data = False
         if data:
-            logging.debug("Starting...Add [{}] Plugin in the metric list.".format(os.path.basename(file)))
+            manage_log.debug("Starting...Add [{}] Plugin in the metric list.".format(os.path.basename(file)))
             if isinstance(data, dict):
                 parms.append(data)
             elif isinstance(data, list):
                 parms.extend(data)
         else:
-            logging.error("错误！无法读取[{}] 这个插件.".format(os.path.basename(file)))
+            manage_log.error("错误！无法读取[{}] 这个插件.".format(os.path.basename(file)))
         rep = UpdateMetric(data)
         if rep:
-            logging.info("上传{f}成功！状态：{stat}".format(f=os.path.basename(file), stat=rep))
+            manage_log.info("上传{f}成功！状态：{stat}".format(f=os.path.basename(file), stat=rep))
 
     def make_jobs(self):
         if not os.path.exists(self.PluginPath):
@@ -60,7 +61,7 @@ class JobsManage:
                 try:
                     timer = int(f_name.split("_")[0])
                 except ValueError:
-                    logging.error('''
+                    manage_log.error('''
 					无法导入{}此文件
 					格式说明：300_ping.py
 					'''.format(f_name))

@@ -1,8 +1,8 @@
 from Client.RPC import client
-from util.config import *
+from util.config import HEARTBEAT,Geloger,DEBUG
 
 ADDRS = HEARTBEAT.get('addr')
-Geloger(name='Client.HbsClient', file='app.log', debug=DEBUG)
+hbs_log = Geloger(name='Client.HbsClient', file='app.log', debug=DEBUG)
 
 
 class Hbs(client):
@@ -15,8 +15,8 @@ class Hbs(client):
             try:
                 self.SendMetric('Agent.TrustableIps', None)
             except Exception as err:
-                logging.error(err)
-                logging.info('reconnect..')
+                hbs_log.error(err)
+                hbs_log.info('reconnect..')
                 self.socket.connect(self.addr)
 
 
@@ -38,6 +38,6 @@ def Update(metric):
             resp = cl.SendMetric('Agent.ReportStatus', metric)
         except Exception as err:
             resp = None
-            logging.error(err)
+            hbs_log.error(err)
         if resp:
             return resp

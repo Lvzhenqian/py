@@ -1,23 +1,23 @@
+import os
 from util import thread
-from util.config import *
+from util.config import Geloger,DEBUG
 from AutoUpdate import Install
 from urllib import request
-import time
 
-Geloger(name='main', file='app.log', debug=DEBUG)
+main_log = Geloger(name='main', file='app.log', debug=DEBUG)
 
 
 def service():
-    logging.debug('开启API服务!')
+    main_log.debug('开启API服务!')
     thread.APIthread()
-    logging.debug('开始作业：{}'.format(thread.Jobs.get_jobs()))
+    main_log.debug('开始作业：{}'.format(thread.Jobs.get_jobs()))
     thread.Jobs.start()
     try:
         while True:
             pass
     except (KeyboardInterrupt, SystemExit):
         thread.Jobs.shutdown()
-        logging.debug('主进程退出！')
+        main_log.debug('主进程退出！')
 
 
 def main():

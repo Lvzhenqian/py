@@ -1,8 +1,8 @@
-from util.config import *
+from util.config import TRANSFER,Geloger,DEBUG
 from Client.RPC import client
 
 ADDRS = TRANSFER['addrs']
-Geloger(name='Client.TransClient', file='app.log', debug=DEBUG)
+trans_log = Geloger(name='Client.TransClient', file='app.log', debug=DEBUG)
 
 
 class Transfer(client):
@@ -15,8 +15,8 @@ class Transfer(client):
             try:
                 self.SendMetric('Transfer.Ping', None)
             except Exception as err:
-                logging.error(err)
-                logging.error('rebuild connect.')
+                trans_log.error(err)
+                trans_log.error('rebuild connect.')
                 self.socket.connect(self.addr)
 
 
@@ -40,4 +40,4 @@ def UpdateMetric(metrics: list):
                 if resp.get('Message', 'fail') == 'ok':
                     return resp
         else:
-            logging.error("无法发送到Transfer，请检查网络！")
+            trans_log.error("无法发送到Transfer，请检查网络！")

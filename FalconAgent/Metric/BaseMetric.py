@@ -3,7 +3,9 @@ import psutil
 import time
 
 from Client.TransClient import UpdateMetric
-from util.config import *
+from util.config import HOSTNAME, Geloger, DEBUG, VERSION, COLLECTOR, IGNORE
+
+base_log = Geloger(name='Metric.BaseMetric', file='app.log', debug=DEBUG)
 
 
 def is_interface_ignore(key):
@@ -13,7 +15,7 @@ def is_interface_ignore(key):
 
 
 def collect():
-    logging.debug('基础数据提交')
+    base_log.debug('基础数据提交')
     time_now = int(time.time())
     payload = []
     data = {"endpoint": HOSTNAME, "metric": "", "timestamp": time_now,
@@ -38,7 +40,7 @@ def collect():
     payload.append(copy.copy(data))
 
     # cpu
-    logging.debug(cpu_status)
+    base_log.debug(cpu_status)
     data["metric"] = "cpu.user"
     data["value"] = cpu_status.user
     data["counterType"] = "GAUGE"
@@ -149,13 +151,13 @@ def collect():
         data["metric"] = "net.if.out.drop"
         data["value"] = net_io_status[key].dropout
         payload.append(copy.copy(data))
-        logging.debug(payload)
+        base_log.debug(payload)
 
     data = [x for x in payload if x.get('metric') not in IGNORE]
 
     try:
         result = UpdateMetric(data)
     except Exception as err:
-        logging.error(err)
+        base_log.error(err)
     else:
-        logging.info(result)
+        base_log.info(result)
