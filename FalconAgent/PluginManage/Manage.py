@@ -1,9 +1,14 @@
 import os
-from util.config import Geloger, DEBUG
+import logging
+from util.config import log_File, console, leve
 from Client.TransClient import UpdateMetric
 from util import thread
 
-manage_log = Geloger(name='PluginManage.Mange', file='app.log', debug=DEBUG)
+manage_log = logging.getLogger('root.Mange')
+manage_log.setLevel(leve)
+manage_log.propagate = False
+manage_log.addHandler(log_File)
+manage_log.addHandler(console)
 
 
 class JobsManage:

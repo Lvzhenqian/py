@@ -1,8 +1,13 @@
+import logging
 from Client.RPC import client
-from util.config import HEARTBEAT,Geloger,DEBUG
+from util.config import HEARTBEAT, log_File, console, leve
 
 ADDRS = HEARTBEAT.get('addr')
-hbs_log = Geloger(name='Client.HbsClient', file='app.log', debug=DEBUG)
+hbs_log = logging.getLogger('root.HbsClient')
+hbs_log.setLevel(leve)
+hbs_log.propagate = False
+hbs_log.addHandler(log_File)
+hbs_log.addHandler(console)
 
 
 class Hbs(client):

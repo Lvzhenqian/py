@@ -1,5 +1,6 @@
 # coding:utf-8
-from util.config import Geloger,INSTALL,DEBUG
+import logging
+from util.config import leve,log_fmt, console, INSTALL
 from urllib import request, parse, error
 from platform import machine
 from shutil import move, rmtree
@@ -7,7 +8,13 @@ import socket, json, time, os, win32serviceutil, psutil
 from hashlib import md5 as md5sum
 from zipfile import ZipFile
 
-install_log = Geloger(name='AutoUpdate.install', file='install.log', debug=DEBUG)
+fh = logging.FileHandler(filename='install.log', encoding='utf-8')
+fh.setLevel(leve)
+fh.setFormatter(log_fmt)
+install_log = logging.getLogger('root.install')
+install_log.propagate = False
+install_log.addHandler(fh)
+install_log.addHandler(console)
 
 
 class Upgrade:

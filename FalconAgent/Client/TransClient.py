@@ -1,8 +1,13 @@
-from util.config import TRANSFER,Geloger,DEBUG
+import logging
+from util.config import TRANSFER, log_File, console, leve
 from Client.RPC import client
 
 ADDRS = TRANSFER['addrs']
-trans_log = Geloger(name='Client.TransClient', file='app.log', debug=DEBUG)
+trans_log = logging.getLogger('root.TransClient')
+trans_log.setLevel(leve)
+trans_log.propagate = False
+trans_log.addHandler(log_File)
+trans_log.addHandler(console)
 
 
 class Transfer(client):

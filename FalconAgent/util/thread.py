@@ -3,14 +3,19 @@ from threading import Thread
 from PluginManage.Manage import JobsManage
 from api import HttpAPI
 from apscheduler.schedulers.background import BackgroundScheduler
-from util.config import Geloger,DEBUG,PLUGIN
+from util.config import log_File, console, PLUGIN, leve
 from Metric.BaseMetric import collect
 from Metric.Repo import report
 
 Jobs = BackgroundScheduler()
 Plugin = JobsManage(PLUGIN)
 Plugin.make_jobs()
-thread_log = Geloger(name='util.thread', file='app.log', debug=DEBUG)
+
+thread_log = logging.getLogger('root.thread')
+thread_log.setLevel(leve)
+thread_log.propagate = False
+thread_log.addHandler(log_File)
+thread_log.addHandler(console)
 
 
 @Jobs.scheduled_job(trigger='interval', id='UpdataThread', minutes=5)

@@ -3,23 +3,6 @@ import logging
 import os
 import sys
 
-
-def Geloger(name, file, debug=False):
-    leve = logging.DEBUG if debug else logging.INFO
-    log = logging.getLogger(name)
-    fmt = logging.Formatter('%(asctime)s --[%(threadName)10s]--[%(levelname)7s]: %(message)s')
-    fh = logging.FileHandler(filename=file, mode='a', encoding='utf-8')
-    fh.setLevel(leve)
-    fh.setFormatter(fmt)
-
-    console = logging.StreamHandler(stream=sys.stdout)
-    console.setLevel(leve)
-    console.setFormatter(fmt)
-    log.addHandler(console)
-    log.addFilter(fh)
-    return log
-
-
 SCRIPTPATH = r'D:\FalconAgent'
 # SCRIPTPATH = os.path.dirname(os.path.realpath(sys.executable))
 cfg_file = os.path.join(SCRIPTPATH, 'cfg.json')
@@ -29,7 +12,7 @@ try:
     with open(cfg_file) as confile:
         config = json.load(confile)
 except Exception as e:
-    l = Geloger(name='util.config', file='app.log')
+    l = logging.getLogger('root.config2')
     l.error(e)
 
 HOSTNAME = config.get('hostname')
@@ -43,4 +26,22 @@ IGNORE = config.get('ignore')
 VERSION = config.get('version')
 INSTALL = config.get('InstallPath')
 PLUGIN = os.path.join(SCRIPTPATH, 'plugin')
-conf_log = Geloger(name='util.config', file='app.log', debug=DEBUG)
+
+##日志配置
+LOGNAME = 'app.log'
+leve = logging.DEBUG if DEBUG else logging.INFO
+conf_log = logging.getLogger('root.config')
+conf_log.propagate = False
+log_fmt = logging.Formatter('%(asctime)s --[%(threadName)10s]--[%(levelname)7s]: %(message)s')
+
+log_File = logging.FileHandler(filename=LOGNAME, encoding='utf-8')
+log_File.setLevel(leve)
+log_File.setFormatter(log_fmt)
+
+console = logging.StreamHandler(stream=sys.stdout)
+console.setLevel(leve)
+console.setFormatter(log_fmt)
+
+conf_log.addHandler(console)
+
+print(conf_log.handlers)

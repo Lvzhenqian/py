@@ -1,11 +1,16 @@
 import copy
 import psutil
 import time
+import logging
 
 from Client.TransClient import UpdateMetric
-from util.config import HOSTNAME, Geloger, DEBUG, VERSION, COLLECTOR, IGNORE
+from util.config import HOSTNAME, log_File, console, VERSION, COLLECTOR, IGNORE, leve
 
-base_log = Geloger(name='Metric.BaseMetric', file='app.log', debug=DEBUG)
+base_log = logging.getLogger('root.BaseMetric')
+base_log.setLevel(leve)
+base_log.propagate = False
+base_log.addHandler(log_File)
+base_log.addHandler(console)
 
 
 def is_interface_ignore(key):

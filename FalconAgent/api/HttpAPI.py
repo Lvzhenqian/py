@@ -1,9 +1,14 @@
+import logging
 from flask import Flask, request, jsonify
 from Client import TransClient
-from util.config import Geloger,DEBUG
+from util.config import log_File, console, leve
 
 app = Flask(__name__)
-api_log = Geloger(name='api.HttpAPI', file='app.log', debug=DEBUG)
+api_log = logging.getLogger('root.HttpAPI')
+api_log.setLevel(leve)
+api_log.propagate = False
+api_log.addHandler(log_File)
+api_log.addHandler(console)
 
 
 @app.route('/health', methods=['GET'])

@@ -1,10 +1,14 @@
 import os
+import logging
 from util import thread
-from util.config import Geloger,DEBUG
+from util.config import log_File, console, leve
 from AutoUpdate import Install
 from urllib import request
 
-main_log = Geloger(name='main', file='app.log', debug=DEBUG)
+main_log = logging.getLogger('root')
+main_log.setLevel(leve)
+main_log.addHandler(log_File)
+main_log.addHandler(console)
 
 
 def service():
