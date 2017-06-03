@@ -2,12 +2,15 @@ from util import thread
 from util.config import *
 from AutoUpdate import Install
 from urllib import request
+import time
+
+Geloger(name='main', file='app.log', debug=DEBUG)
 
 
 def service():
     logging.debug('开启API服务!')
     thread.APIthread()
-    logging.debug('开始作业：{}'.format(thread.Jobs.get_job()))
+    logging.debug('开始作业：{}'.format(thread.Jobs.get_jobs()))
     thread.Jobs.start()
     try:
         while True:
@@ -28,4 +31,6 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    # main()
+
+    service()

@@ -10,6 +10,7 @@ from Metric.Repo import report
 Jobs = BackgroundScheduler()
 Plugin = JobsManage(PLUGIN)
 Plugin.make_jobs()
+Geloger(name='util.thread', file='app.log', debug=DEBUG)
 
 
 @Jobs.scheduled_job(trigger='interval', id='UpdataThread', minutes=5)

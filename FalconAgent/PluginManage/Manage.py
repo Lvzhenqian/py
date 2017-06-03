@@ -2,6 +2,8 @@ from util.config import *
 from Client.TransClient import UpdateMetric
 from util import thread
 
+Geloger(name='PluginManage.Mange', file='app.log', debug=DEBUG)
+
 
 class JobsManage:
     def __init__(self, plugin):
@@ -63,7 +65,8 @@ class JobsManage:
 					格式说明：300_ping.py
 					'''.format(f_name))
                     continue
-                thread.Jobs.add_job(func=self.__push, args=(files,), trigger='interval', seconds=timer, id='Plugin_Manage')
+                thread.Jobs.add_job(func=self.__push, args=(files,), trigger='interval', seconds=timer,
+                                    id='Plugin_Manage')
                 #
                 # def run():
                 # 	job = JobsManage(PLUGIN)

@@ -2,6 +2,7 @@ from Client.RPC import client
 from util.config import *
 
 ADDRS = HEARTBEAT.get('addr')
+Geloger(name='Client.HbsClient', file='app.log', debug=DEBUG)
 
 
 class Hbs(client):

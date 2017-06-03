@@ -3,6 +3,7 @@ from Client import TransClient
 from util.config import *
 
 app = Flask(__name__)
+Geloger(name='api.HttpAPI', file='app.log', debug=DEBUG)
 
 
 @app.route('/health', methods=['GET'])

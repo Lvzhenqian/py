@@ -7,11 +7,7 @@ import socket, json, time, os, win32serviceutil, psutil
 from hashlib import md5 as md5sum
 from zipfile import ZipFile
 
-console = logging.StreamHandler()
-console.setLevel(logging.INFO)
-formatter = logging.Formatter('%(asctime)s --[%(threadName)10s]--[%(levelname)7s]: %(message)s')
-console.setFormatter(formatter)
-logging.getLogger('').addHandler(console)
+Geloger(name='AutoUpdate.install', file='install.log', debug=DEBUG)
 
 
 class Upgrade:

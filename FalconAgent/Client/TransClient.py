@@ -2,6 +2,7 @@ from util.config import *
 from Client.RPC import client
 
 ADDRS = TRANSFER['addrs']
+Geloger(name='Client.TransClient', file='app.log', debug=DEBUG)
 
 
 class Transfer(client):
