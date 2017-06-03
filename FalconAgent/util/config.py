@@ -32,7 +32,7 @@ LOGNAME = 'app.log'
 leve = logging.DEBUG if DEBUG else logging.INFO
 conf_log = logging.getLogger('root.config')
 conf_log.propagate = False
-log_fmt = logging.Formatter('%(asctime)s --[%(threadName)10s]--[%(levelname)7s]: %(message)s')
+log_fmt = logging.Formatter('[%(asctime)s]:[%(name)s]:[%(levelname)s]:%(message)s')
 
 log_File = logging.FileHandler(filename=LOGNAME, encoding='utf-8')
 log_File.setLevel(leve)
@@ -44,4 +44,3 @@ console.setFormatter(log_fmt)
 
 conf_log.addHandler(console)
 
-print(conf_log.handlers)
