@@ -3,6 +3,7 @@ from threading import Thread
 from PluginManage.Manage import JobsManage
 from api import HttpAPI
 from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers import interval
 from util.config import log_File, console, PLUGIN, leve
 from Metric.BaseMetric import collect
 from Metric.Repo import report
