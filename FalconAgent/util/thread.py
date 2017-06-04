@@ -48,7 +48,11 @@ def APIthread():
 
 @Jobs.scheduled_job(trigger='interval', id='BaseMetric', minutes=1)
 def BasePush():
-    return collect()
+    try:
+        collect()
+    except Exception as err:
+        thread_log.error(err)
+    return
 
 
 @Jobs.scheduled_job(trigger='interval', id='HbsRepo', minutes=1)

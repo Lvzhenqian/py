@@ -1,6 +1,6 @@
 # coding:utf-8
 import logging
-from util.config import leve,log_fmt, console, INSTALL
+from util.config import leve, log_fmt, console, INSTALL
 from urllib import request, parse, error
 from platform import machine
 from shutil import move, rmtree
@@ -105,7 +105,7 @@ class Upgrade:
             server=os.path.join(
                 self.Install_Path, 'nssm64.exe') if machine() == 'AMD64' else os.path.join(
                 self.Install_Path, 'nssm32.exe'),
-            exe=os.path.realpath(__file__)
+            exe=os.path.join(self.Install_Path, 'agent.exe')
         ))
         time.sleep(2)
         try:
