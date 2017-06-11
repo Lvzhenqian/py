@@ -1,6 +1,6 @@
 from xml.etree import cElementTree
 from shutil import move as mv
-import time
+import time,os
 
 
 class ET(cElementTree.TreeBuilder):
@@ -12,7 +12,7 @@ class ET(cElementTree.TreeBuilder):
 
 def Tree(file: str) -> cElementTree.parse:
 	backup = '_'.join((file, time.strftime('%Y-%m-%d')))
-	if not backup:
+	if not os.path.exists(backup):
 		mv(file, backup)
 	with open(backup, 'r+', encoding='utf8') as f:
 		return cElementTree.parse(f, parser=cElementTree.XMLParser(target=ET()))

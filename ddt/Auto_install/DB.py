@@ -1,9 +1,12 @@
 # coding:utf8
-from .XmlTree import Tree, TreeWrite
-from subprocess import run, PIPE
-from platform import release
+import os
+import win32serviceutil
+import configparser
 from functools import partial
-import os,win32serviceutil
+from platform import release
+from subprocess import run, PIPE
+
+from .XmlTree import Tree, TreeWrite
 
 
 class InstallDB:
@@ -12,8 +15,9 @@ class InstallDB:
 		self.abspath = partial(os.path.join, self.path)
 		self.rule = {'7': self.server_2008, '2003Server': self.server_2003}
 
+
 	def server_2003(self):
-		pass
+		return self.server_2008()
 
 	def server_2008(self):
 		Framework_prc = run('ServerManagerCmd -i NET-Framework -a', shell=True, stdout=PIPE, stderr=PIPE)
@@ -47,20 +51,39 @@ class InstallDB:
 class AutoDB:
 	def __init__(self):
 		self.__Center_File = r'D:\dandantang\Center\Center.Service.exe.config'
-		self.__key = r'D:\dandantang\Center\key.txt'
+		self.__WCFFile = r'D:\dandantang\Center\WCFFileGet.dll.config'
+		self.__Create_npc = r'D:\dandantang\Create_npc\CreatNpcPlayers.exe.config'
+		self.config = configparser.ConfigParser()
+		self.config.read('./config.ini')
+		self.__key = self.config['Config']['startkey']
 
-	def __Center_File(self, AreaID, constring='', countdb=''):
+	def __Center_File(self):
 		tree = Tree(self.__Center_File)
 		root = tree.getroot()
 		for add in root.findall('appSettings/add'):
 			if add.attrib['key'] == 'AreaID':
-				add.attrib['value'] = AreaID
-			if add.attrib['key'] == 'conString' and constring != '':
-				add.attrib['value'] = constring
-			if add.attrib['key'] == 'countDb' and countdb != '':
-				add.attrib['value'] = countdb
+				add.attrib['value'] = self.config['Config']['AreaID']
+			if add.attrib['key'] == 'conString':
+				add.attrib['value'] = self.config['Config']['conString']
+			if add.attrib['key'] == 'countDb':
+				add.attrib['value'] = self.config['Config']['countDb']
 		TreeWrite(tree, self.__Center_File)
 
 	def __Key_File(self, key):
 		with open(self.__key, 'w') as f:
 			f.write(key)
+
+	def __WCffile(self):
+		tree = Tree(self.__WCFFile)
+		tree.find('system.serviceModel/client/endpoint').attrib['address'] = r'http://{IP}:12347/MethodForGame'.format(
+			IP=self.config['Config']['IIS_IP']
+		)
+		TreeWrite(tree,self.__WCFFile)
+
+	def __Create_NPC(self):
+		tree = Tree(self.__Create_npc)
+		root = tree.getroot()
+		for add in root.findall('appSettings/add'):
+			if add.attrib['key'] == 'conString':
+				add.attrib['value'] = self.config['Config']['conString']
+		TreeWrite(tree,self.__Create_npc)

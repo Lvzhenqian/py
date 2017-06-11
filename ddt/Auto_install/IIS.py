@@ -1,28 +1,32 @@
 # coding:utf8
+import configparser
 from .XmlTree import Tree, TreeWrite
 from urllib.parse import urlparse
 
 
 class AutoIIS:
 	def __init__(self):
+		self.config = configparser.ConfigParser()
+		self.config.read('./config.ini')
 		self.__Road_config = r'D:\dandantang\Server1\Road.Service.exe.config'
 		self.__Flash_config = r'D:\dandantang\Flash\config.xml'
 		self.__Flash_web = r'D:\dandantang\Flash\web.config'
 		self.__Flash_Default = r'D:\dandantang\Flash\Default.aspx'
 		self.__request_config = r'D:\dandantang\Request\web.config'
+		self.__fight_config = r'D:\dandantang\FightServer\Fighting.Service.exe.config'
 		self.__host = r'C:\Windows\System32\drivers\etc\hosts'
 		self.__dst = lambda st, dt: st.replace(urlparse(st).netloc, dt)
 
-	def Road_config(self, Appname, AreaID, AreaName):
+	def Road_config(self):
 		tree = Tree(self.__Road_config)
 		root = tree.getroot()
 		for add in root.findall('appSettings/add'):
 			if add.attrib['key'] == 'AreaID':
-				add.attrib['value'] = AreaID
+				add.attrib['value'] = self.config['Config']['AreaID']
 			if add.attrib['key'] == 'AreaName':
-				add.attrib['value'] = AreaName
+				add.attrib['value'] = self.config['Config']['AreaName']
 			if add.attrib['key'] == 'AppName':
-				add.attrib['value'] = Appname
+				add.attrib['value'] = self.config['Config']['AppName']
 		TreeWrite(tree, self.__Road_config)
 
 	def Flash_config(self, Req, parter_id, assist):
