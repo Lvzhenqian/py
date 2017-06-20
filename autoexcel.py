@@ -42,7 +42,7 @@ class convert:
 		site = []
 		fill = lambda st: ''.join([x for x in st.split('-')[0] if x in '0123456789'])
 		excel = self.__ReadCsv()
-		add = lambda x: site.append(x) if x not in site else x
+		add = lambda x: site.append(x) if x not in site else None
 		for lines in excel:
 			for ne in lines.more.split('、'):
 				n = fill(ne)
