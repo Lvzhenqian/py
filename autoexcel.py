@@ -34,28 +34,32 @@ class convert:
 			"7road官网": '7road_{:0>4}_cgdb'.format,
 			"多玩": 'duowan_{:0>4}_cgdb'.format,
 			"7k7k": '7k7k_{:0>4}_cgdb'.format,
-			"开心网": 'kxwang_{:0>4}_cgdb'.format,
+			"开心": 'kxwang_{:0>4}_cgdb'.format,
 			"奇虎": 'qihu360_{:0>4}_cgdb'.format,
-			"淘米": 'taomi_{:0>4}_cgdb'.format,
+			"上海淘米": 'taomi_{:0>4}_cgdb'.format,
 			"4399": '4399_{:0>4}_cgdb'.format
 		}
 		site = []
-		fill = lambda st: ''.join([x for x in st if x in '0123456789'])
+		fill = lambda st: ''.join([x for x in st.split('-')[0] if x in '0123456789'])
 		excel = self.__ReadCsv()
+		add = lambda x: site.append(x) if x not in site else x
 		for lines in excel:
 			for ne in lines.more.split('、'):
 				n = fill(ne)
 				if lines.name:
 					self.name = lines.name
 				if '7road' in self.name or '官网' in self.name:
-					site.append(rule["7road官网"](n))
+					add(rule["7road官网"](n))
 				if '360' in self.name or '奇虎' in self.name:
-					site.append(rule["奇虎"](n))
+					add(rule["奇虎"](n))
 				if 'kx' in self.name or '开心' in self.name:
-					site.append(rule["开心网"](n))
-				site.append(rule[self.name](n))
+					add(rule["开心"](n))
+				if 'taomi' in self.name or '淘米' in self.name:
+					add(rule["上海淘米"](n))
+				add(rule[self.name](n))
 		return site
 
 
-s = convert(csvfile=r'D:\test.csv', iplist=None)
-print(s.getsite())
+s = convert(csvfile=r'.\test.csv', iplist=None)
+for site in s.getsite():
+	print(site)
