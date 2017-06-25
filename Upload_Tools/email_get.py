@@ -6,10 +6,12 @@ import requests
 from urllib import parse
 import json
 import re
+import os
 
 
 class mail_down:
-	def __index__(self, oa, tag=True):
+
+	def __init__(self, oa, tag=True):
 		with open('./config.json') as f:
 			conf = json.loads(f.read())
 		self.__username = conf['email']['name']
@@ -19,6 +21,7 @@ class mail_down:
 		self.mail.pass_(self.__passwd)
 		self.__tag = tag
 		self.__oa = oa
+		self.Md5 = None
 
 	def __read_body(self, mail_num):
 		tmp = []
@@ -52,6 +55,9 @@ class mail_down:
 	def download_pack(self, save_path):
 		requests.packages.urllib3.disable_warnings()
 		m = self.__choose_mail()
+		if not m:
+			return
+		self.Md5 = m['md5']
 		header = {
 			'Content-Type': 'application/x-www-form-urlencoded',
 			'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
@@ -80,3 +86,7 @@ class mail_down:
 							f.flush()
 						bar.update(n)
 						n += 1
+		return os.path.realpath(save_path)
+
+	def __del__(self):
+		return self.mail.close()
