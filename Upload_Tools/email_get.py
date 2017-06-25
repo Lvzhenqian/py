@@ -49,7 +49,7 @@ class mail_down:
 		else:
 			return
 
-	def download_pack(self,save_path):
+	def download_pack(self, save_path):
 		requests.packages.urllib3.disable_warnings()
 		m = self.__choose_mail()
 		header = {
@@ -67,14 +67,16 @@ class mail_down:
 		with closing(requests.request(method='POST', url=url, data=param, headers=header, stream=True)) as response:
 			chunk_size = 1024  # 单次请求最大值
 			content_size = int(response.headers['content-length'])
+			flag = 0 if content_size % chunk_size == 0 else 1
+			mxv = (content_size // chunk_size) + flag
 			with open(save_path, 'wb') as f:
-				widgets = ['下载进度: ', progressbar.Percentage(), ' ',
-					   progressbar.Bar(marker='#', left='[', right=']'),
-					   ' ', progressbar.ETA(), ' ', progressbar.FileTransferSpeed()]
-				pbar = progressbar.ProgressBar(widgets=widgets, maxval=content_size).start()
-				for chunk in response.iter_content(chunk_size=chunk_size):
-					if chunk:
-						f.write(chunk)
-						f.flush()
-					pbar.update(len(chunk) + 1)
-				pbar.finish()
+				widgets = ['下载：', progressbar.Percentage(), progressbar.Bar(marker='#', left='[', right=']'),
+						   progressbar.ETA()]
+				with progressbar.ProgressBar(widgets=widgets, maxval=mxv) as bar:
+					n = 0
+					for chunk in response.iter_content(chunk_size=chunk_size):
+						if chunk:
+							f.write(chunk)
+							f.flush()
+						bar.update(n)
+						n += 1
