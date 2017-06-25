@@ -1,6 +1,8 @@
 from poplib import POP3
 from email.base64mime import body_decode
-from urllib.request import Request, urlopen
+from contextlib import closing
+import progressbar
+import requests
 from urllib import parse
 import json
 import re
@@ -47,7 +49,8 @@ class mail_down:
 		else:
 			return
 
-	def download_pack(self):
+	def download_pack(self,save_path):
+		requests.packages.urllib3.disable_warnings()
 		m = self.__choose_mail()
 		header = {
 			'Content-Type': 'application/x-www-form-urlencoded',
@@ -61,8 +64,17 @@ class mail_down:
 			'username': self.__username,
 			'password': self.__passwd,
 			'key': keywd}
-		querystring = parse.urlencode(param)
-		req = Request(url=url, data=querystring.encode('ascii'), headers=header)
-		op = urlopen(req).read()
-		with open(r'd:/2.zip', 'wb') as f:
-			f.write(op)
+		with closing(requests.request(method='POST', url=url, data=param, headers=header, stream=True)) as response:
+			chunk_size = 1024  # 单次请求最大值
+			content_size = int(response.headers['content-length'])
+			with open(save_path, 'wb') as f:
+				widgets = ['下载进度: ', progressbar.Percentage(), ' ',
+					   progressbar.Bar(marker='#', left='[', right=']'),
+					   ' ', progressbar.ETA(), ' ', progressbar.FileTransferSpeed()]
+				pbar = progressbar.ProgressBar(widgets=widgets, maxval=content_size).start()
+				for chunk in response.iter_content(chunk_size=chunk_size):
+					if chunk:
+						f.write(chunk)
+						f.flush()
+					pbar.update(len(chunk) + 1)
+				pbar.finish()
