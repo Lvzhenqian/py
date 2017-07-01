@@ -2,6 +2,7 @@ from hashlib import md5 as md5sum
 from zipfile import ZipFile
 from .email_get import *
 import shutil
+import subprocess
 
 
 def unzip(zipfile, path, encoding='gbk'):
@@ -18,8 +19,8 @@ def unzip(zipfile, path, encoding='gbk'):
 					f.write(data)
 
 
-def zip_dir(dirname, zippath):
-	with ZipFile(zippath, 'w') as myzip:
+def zip_dir(dirname, zippath, mode='w'):
+	with ZipFile(zippath, mode=mode) as myzip:
 		if os.path.isfile(dirname):
 			files = dirname
 			myzip.write(files)
@@ -32,11 +33,14 @@ def zip_dir(dirname, zippath):
 
 class work:
 	def __init__(self, path):
+		self.fix = subprocess.STARTUPINFO()
+		self.fix.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 		self.workpath = path
 		os.chdir(self.workpath)
 		self.package = os.path.join(self.workpath, 'package')
 		os.mkdir('./dandantang')
 		self.dir = os.path.join(self.workpath, 'dandantang')
+		self.fileck = 'FileCheck_MD5.exe'
 
 	def keyfile(self, path):
 		resp = requests.get('http://113.107.167.212/GenerateKey?expire=86400')
@@ -74,37 +78,37 @@ exit
 	def IIS_CONFIG_UPDATE(self, path, flag='all'):
 		dic = {
 			'all': '''
-    @echo off  
-    cd /d D:\dandantang\Flash 
-    update.exe 
-    cd /d D:\dandantang\Request\CreateAllXml 
-    CreateAllXml.exe 
-    iisreset -restart 
-    exit
+@echo off  
+cd /d D:\dandantang\Flash 
+update.exe 
+cd /d D:\dandantang\Request\CreateAllXml 
+CreateAllXml.exe 
+iisreset -restart 
+exit
     ''',
 			'baxi': '''
-    @echo off 
-    cd /d D:\dandantang\Flash 
-    update.exe 
-    cd /d D:\dandantang\Request\CreateAllXml 
-    CreateAllXml.exe
-    cd /d D:\dandantang\Resource\Flash
-    create.bat 
-    iisreset -restart 
-    exit 
+@echo off 
+cd /d D:\dandantang\Flash 
+update.exe 
+cd /d D:\dandantang\Request\CreateAllXml 
+CreateAllXml.exe
+cd /d D:\dandantang\Resource\Flash
+create.bat 
+iisreset -restart 
+exit 
     ''',
 			'guonei': '''
-    @echo off  
-    cd /d D:\dandantang\Flash 
-    update.exe
-    UpdateFileName.exe 
-    cd /d D:\dandantang\Resource\Flash 
-    update.exe
-    UpdateFileName.exe 
-    cd /d D:\dandantang\Request\XmlCreate 
-    CreateAllXml.exe 
-    iisreset -restart 
-    exit
+@echo off  
+cd /d D:\dandantang\Flash 
+update.exe
+UpdateFileName.exe 
+cd /d D:\dandantang\Resource\Flash 
+update.exe
+UpdateFileName.exe 
+cd /d D:\dandantang\Request\XmlCreate 
+CreateAllXml.exe 
+iisreset -restart 
+exit
     '''}
 		with open('config_update.bat', 'wt') as f:
 			f.write(dic[flag])
@@ -116,75 +120,75 @@ exit
         :return:
         '''
 		s = '''
-    @echo off 
-    echo 删除进程 
-    TASKKILL /F /IM Road.Service.exe  
-    TASKKILL /F /IM Fighting.Service.exe 
-    TASKKILL /F /IM Center.Service.exe 
-    REM  File Update Start 
-    echo. 
-    echo Setp1 File Update Start!!!!!! 
-    echo. 
-    echo. 
-    echo Begin To Update Files,Please Wait...... 
-    echo -------------------------------------------------------- 
-    d:\ddt_tool\FileBack.exe d:\dandantang D:\server-new\dandantang\dandantang D:\server-bak\ -u 
-    echo. 
-    echo. 
-    echo File Update Finish!!!!!! 
-    echo. 
-    echo================================ 
-    echo. 
-    REM Check File 
-    echo Setp2 Check File 
-    echo. 
-    echo File Check start!!!!!! 
-    echo. 
-    echo. 
-    d:\ddt_tool\FileCheck_MD5.exe -check d:\dandantang -k d:\server-new\dandantang\dandantang.key 
-    echo. 
-    echo File Check Finish!!!!!! 
-    echo. 
-    echo================================ 
-    echo 
-    echo Setp 3 Update The configure File 
-    iisreset -restart
-    '''
+@echo off 
+echo 删除进程 
+TASKKILL /F /IM Road.Service.exe  
+TASKKILL /F /IM Fighting.Service.exe 
+TASKKILL /F /IM Center.Service.exe 
+REM  File Update Start 
+echo. 
+echo Setp1 File Update Start!!!!!! 
+echo. 
+echo. 
+echo Begin To Update Files,Please Wait...... 
+echo -------------------------------------------------------- 
+d:\ddt_tool\FileBack.exe d:\dandantang D:\server-new\dandantang\dandantang D:\server-bak\ -u 
+echo. 
+echo. 
+echo File Update Finish!!!!!! 
+echo. 
+echo================================ 
+echo. 
+REM Check File 
+echo Setp2 Check File 
+echo. 
+echo File Check start!!!!!! 
+echo. 
+echo. 
+d:\ddt_tool\FileCheck_MD5.exe -check d:\dandantang -k d:\server-new\dandantang\dandantang.key 
+echo. 
+echo File Check Finish!!!!!! 
+echo. 
+echo================================ 
+echo 
+echo Setp 3 Update The configure File 
+iisreset -restart
+'''
 		with open('file_update.bat', 'wt') as f:
 			f.write(s)
 
 	def File_Update_NotKill(self, path):
 		s = '''
-    @echo off 
-    REM  File Update Start 
-    echo. 
-    echo Setp1 File Update Start!!!!!! 
-    echo. 
-    echo. 
-    echo Begin To Update Files,Please Wait...... 
-    echo -------------------------------------------------------- 
-    d:\ddt_tool\FileBack.exe d:\dandantang D:\server-new\dandantang\dandantang D:\server-bak\ -u 
-    echo. 
-    echo. 
-    echo File Update Finish!!!!!! 
-    echo. 
-    echo================================ 
-    echo. 
-    REM Check File 
-    echo Setp2 Check File 
-    echo. 
-    echo File Check start!!!!!! 
-    echo. 
-    echo. 
-    d:\ddt_tool\FileCheck_MD5.exe -check d:\dandantang -k d:\server-new\dandantang\dandantang.key 
-    echo. 
-    echo File Check Finish!!!!!! 
-    echo. 
-    echo================================ 
-    echo 
-    echo Setp 3 Update The configure File 
-    iisreset -restart
-    '''
+@echo off 
+REM  File Update Start 
+echo. 
+echo Setp1 File Update Start!!!!!! 
+echo. 
+echo. 
+echo Begin To Update Files,Please Wait...... 
+echo -------------------------------------------------------- 
+d:\ddt_tool\FileBack.exe d:\dandantang D:\server-new\dandantang\dandantang D:\server-bak\ -u 
+echo. 
+echo. 
+echo File Update Finish!!!!!! 
+echo. 
+echo================================ 
+echo. 
+REM Check File 
+echo Setp2 Check File 
+echo. 
+echo File Check start!!!!!! 
+echo. 
+echo. 
+d:\ddt_tool\FileCheck_MD5.exe -check d:\dandantang -k d:\server-new\dandantang\dandantang.key 
+echo. 
+echo File Check Finish!!!!!! 
+echo. 
+echo================================ 
+echo 
+echo Setp 3 Update The configure File 
+iisreset -restart
+'''
 		with open('file_update.bat', 'wt') as f:
 			f.write(s)
 
@@ -192,6 +196,8 @@ exit
 		dirs = os.path.join(self.dir, r'db/dandantang/dandantang')
 		os.makedirs(dirs)
 		s_dir = [os.path.join(self.package, i) for i in ('Center', 'Create_Npc', 'sql')]
+		if not s_dir:
+			return False
 		for p in s_dir:
 			if os.path.exists(p):
 				shutil.copy2(p, dirs)
@@ -200,12 +206,54 @@ exit
 				for sqlfile in os.listdir(p):
 					shutil.copy2(sqlfile, sqldir)
 				self.sql(sqldir)
-				shutil.copy2(os.path.join(self.package, 'readme.txt'), sqldir)
+				###创建dandantang.key文件
+				md5key = os.path.join(sqldir, 'dandantang.key')
+				p = subprocess.Popen(args=[self.fileck, '-create', dirs, '-k', md5key], shell=True,
+									 stderr=subprocess.PIPE, stdout=subprocess.PIPE, stdin=subprocess.DEVNULL,
+									 universal_newlines=True, startupinfo=self.fix, env=os.environ)
+				ret = p.stdout.read()
+				if ret.split()[1] != 'successed':
+					return False
+				p = subprocess.Popen(args=[self.fileck, '-check', dirs, '-k', md5key], shell=True,
+									 stderr=subprocess.PIPE, stdout=subprocess.PIPE, stdin=subprocess.DEVNULL,
+									 universal_newlines=True, startupinfo=self.fix, env=os.environ)
+				if ret.split()[1] != 'success':
+					return False
 		if os.path.exists(os.path.join(dirs, 'Center')):
 			self.keyfile(os.path.join(dirs, 'Center'))
+		Compress_Path = os.path.join(self.dir, r'db')
+		os.chdir(Compress_Path)
+		shutil.copy2(os.path.join(self.package, 'readme.txt'), Compress_Path)
+		zip_dir('./dandantang', './dandantang.zip')
+		zip_dir('./readme.txt', './dandantang.zip', mode='a')
+
+	def FS_Make_Package(self):
+		dirs = os.path.join(self.dir, r'db/dandantang/dandantang')
+		os.makedirs(dirs)
+		s_dir = [os.path.join(self.package, i) for i in ('Center', 'AreaRankServer', 'FightServer','sql')]
+		if not s_dir:
+			return False
+		for p in s_dir:
+			if os.path.exists(p):
+				shutil.copy2(p, dirs)
+			if p.endswith('FightServer'):
+
+				shutil.copy2(p, dirs)
+			if p.endswith('sql'):
+				sqldir = os.path.join(self.dir, r'db/dandantang')
+				for sqlfile in os.listdir(p):
+					shutil.copy2(sqlfile, sqldir)
+				self.sql(sqldir)
 
 
+	def IIS_Make_Package(self):
+		pass
 
+	def GS_Make_Package(self):
+		pass
+
+	def GSIIS_Make_Package(self):
+		pass
 
 
 oa_num = input('请输入邮件oa单号：')
