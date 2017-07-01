@@ -32,7 +32,7 @@ def zip_dir(dirname, zippath, mode='w'):
 
 
 class work:
-	def __init__(self, path):
+	def __init__(self, path, agent,oa):
 		self.fix = subprocess.STARTUPINFO()
 		self.fix.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 		self.workpath = path
@@ -192,68 +192,135 @@ iisreset -restart
 		with open('file_update.bat', 'wt') as f:
 			f.write(s)
 
+	def __Compress(self, which):
+		Compress_Path = os.path.join(self.dir, which)
+		if os.path.exists(Compress_Path):
+			os.chdir(Compress_Path)
+			shutil.copy2(os.path.join(self.package, 'readme.txt'), Compress_Path)
+			zip_dir('./dandantang', './dandantang.zip')
+			zip_dir('./readme.txt', './dandantang.zip', mode='a')
+
+	def ___check_key(self, source, dst_path):
+		###创建dandantang.key文件
+		md5key = os.path.join(dst_path, 'dandantang.key')
+		p = subprocess.Popen(args=[self.fileck, '-create', source, '-k', md5key], shell=True,
+							 stderr=subprocess.PIPE, stdout=subprocess.PIPE, stdin=subprocess.DEVNULL,
+							 universal_newlines=True, startupinfo=self.fix, env=os.environ)
+		ret = p.stdout.read()
+		if ret.split()[1] != 'successed':
+			return False
+		c = subprocess.Popen(args=[self.fileck, '-check', source, '-k', md5key], shell=True,
+							 stderr=subprocess.PIPE, stdout=subprocess.PIPE, stdin=subprocess.DEVNULL,
+							 universal_newlines=True, startupinfo=self.fix, env=os.environ)
+		check_ret = c.stdout.read()
+		if check_ret.split()[1] != 'success':
+			return False
+
 	def DB_Make_Package(self):
-		dirs = os.path.join(self.dir, r'db/dandantang/dandantang')
-		os.makedirs(dirs)
+		copypath = os.path.join(self.dir, r'db/dandantang/dandantang')
+		os.makedirs(copypath)
 		s_dir = [os.path.join(self.package, i) for i in ('Center', 'Create_Npc', 'sql')]
+		compress_path = os.path.join(self.dir, r'db/dandantang')
 		if not s_dir:
 			return False
 		for p in s_dir:
 			if os.path.exists(p):
-				shutil.copy2(p, dirs)
+				shutil.copy2(p, copypath)
 			if p.endswith('sql'):
-				sqldir = os.path.join(self.dir, r'db/dandantang')
 				for sqlfile in os.listdir(p):
-					shutil.copy2(sqlfile, sqldir)
-				self.sql(sqldir)
-				###创建dandantang.key文件
-				md5key = os.path.join(sqldir, 'dandantang.key')
-				p = subprocess.Popen(args=[self.fileck, '-create', dirs, '-k', md5key], shell=True,
-									 stderr=subprocess.PIPE, stdout=subprocess.PIPE, stdin=subprocess.DEVNULL,
-									 universal_newlines=True, startupinfo=self.fix, env=os.environ)
-				ret = p.stdout.read()
-				if ret.split()[1] != 'successed':
-					return False
-				p = subprocess.Popen(args=[self.fileck, '-check', dirs, '-k', md5key], shell=True,
-									 stderr=subprocess.PIPE, stdout=subprocess.PIPE, stdin=subprocess.DEVNULL,
-									 universal_newlines=True, startupinfo=self.fix, env=os.environ)
-				if ret.split()[1] != 'success':
-					return False
-		if os.path.exists(os.path.join(dirs, 'Center')):
-			self.keyfile(os.path.join(dirs, 'Center'))
-		Compress_Path = os.path.join(self.dir, r'db')
-		os.chdir(Compress_Path)
-		shutil.copy2(os.path.join(self.package, 'readme.txt'), Compress_Path)
-		zip_dir('./dandantang', './dandantang.zip')
-		zip_dir('./readme.txt', './dandantang.zip', mode='a')
+					shutil.copy2(sqlfile, compress_path)
+				self.sql(compress_path)
+		self.___check_key(copypath, compress_path)
+		if os.path.exists(os.path.join(copypath, 'Center')):
+			self.keyfile(os.path.join(copypath, 'Center'))
+		return compress_path
 
 	def FS_Make_Package(self):
-		dirs = os.path.join(self.dir, r'db/dandantang/dandantang')
-		os.makedirs(dirs)
-		s_dir = [os.path.join(self.package, i) for i in ('Center', 'AreaRankServer', 'FightServer','sql')]
+		copypath = os.path.join(self.dir, r'fs/dandantang/dandantang')
+		os.makedirs(copypath)
+		s_dir = [os.path.join(self.package, i) for i in ('Center', 'AreaRankServer', 'FightServer', 'sql')]
+		compress_path = os.path.join(self.dir, r'fs/dandantang')
 		if not s_dir:
 			return False
 		for p in s_dir:
 			if os.path.exists(p):
-				shutil.copy2(p, dirs)
+				shutil.copy2(p, copypath)
 			if p.endswith('FightServer'):
-
-				shutil.copy2(p, dirs)
+				shutil.copy2(p, copypath)
+				for n in range(1, 5):
+					ds = os.path.join(copypath, str(n) + 'v' + str(n))
+					shutil.copy2(p, ds)
 			if p.endswith('sql'):
-				sqldir = os.path.join(self.dir, r'db/dandantang')
 				for sqlfile in os.listdir(p):
-					shutil.copy2(sqlfile, sqldir)
-				self.sql(sqldir)
+					shutil.copy2(sqlfile, compress_path)
+				self.sql(compress_path)
+		self.___check_key(copypath, compress_path)
+		return compress_path
 
-
-	def IIS_Make_Package(self):
-		pass
+	def IIS_Make_Package(self, *, online=False, tp='all'):
+		copypath = os.path.join(self.dir, r'iis/dandantang/dandantang')
+		os.makedirs(copypath)
+		s_dir = [os.path.join(self.package, i) for i in ('Flash', 'AreaRankServer', 'Request', 'Resource')]
+		compress_path = os.path.join(self.dir, r'iis/dandantang')
+		if not s_dir:
+			return False
+		for p in s_dir:
+			if os.path.exists(p):
+				shutil.copy2(p, copypath)
+		if online:
+			self.File_Update_NotKill(compress_path)
+		else:
+			self.File_Update_kill(compress_path)
+		self.IIS_CONFIG_UPDATE(compress_path, tp)
+		self.___check_key(copypath, compress_path)
+		return compress_path
 
 	def GS_Make_Package(self):
-		pass
+		copypath = os.path.join(self.dir, r'gs/dandantang/dandantang')
+		os.makedirs(copypath)
+		s_dir = [os.path.join(self.package, i) for i in ('FightServer', 'AreaRankServer', 'Server', 'Server1')]
+		compress_path = os.path.join(self.dir, r'gs/dandantang')
+		if not s_dir:
+			return False
+		for p in s_dir:
+			if os.path.exists(p):
+				shutil.copy2(p, copypath)
+			if p.endswith('Server') or p.endswith('Server1'):
+				shutil.copy2(p, os.path.join(copypath, 'Server1'))
+				shutil.copy2(p, os.path.join(copypath, 'Server2'))
+		self.___check_key(copypath, compress_path)
+		return compress_path
 
-	def GSIIS_Make_Package(self):
-		pass
+	def GSIIS_Make_Package(self, *, online=False, tp='all'):
+		copypath = os.path.join(self.dir, r'gsiis/dandantang/dandantang')
+		os.makedirs(copypath)
+		s_dir = [os.path.join(self.package, i) for i in
+				 ('Flash', 'AreaRankServer', 'Request', 'Resource', 'FightServer',
+				  'Server', 'Server1')]
+		compress_path = os.path.join(self.dir, r'gsiis/dandantang')
+		if not s_dir:
+			return False
+		for p in s_dir:
+			if os.path.exists(p):
+				shutil.copy2(p, copypath)
+			if p.endswith('Server') or p.endswith('Server1'):
+				shutil.copy2(p, os.path.join(copypath, 'Server1'))
+				shutil.copy2(p, os.path.join(copypath, 'Server2'))
+		if online:
+			self.File_Update_NotKill(compress_path)
+		else:
+			self.File_Update_kill(compress_path)
+		self.IIS_CONFIG_UPDATE(compress_path, tp)
+		self.___check_key(copypath, compress_path)
+		return compress_path
+
+	def runner(self):
+		self.DB_Make_Package()
+		self.FS_Make_Package()
+		self.GSIIS_Make_Package()
+		for ps in os.listdir(self.dir):
+			cpath = os.path.realpath(ps)
+			self.__Compress(cpath)
 
 
 oa_num = input('请输入邮件oa单号：')
