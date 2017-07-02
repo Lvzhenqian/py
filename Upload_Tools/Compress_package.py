@@ -1,6 +1,6 @@
-from hashlib import md5 as md5sum
+
 from zipfile import ZipFile
-from .email_get import *
+import os
 import shutil
 import subprocess
 
@@ -323,11 +323,4 @@ iisreset -restart
 			self.__Compress(cpath)
 
 
-oa_num = input('请输入邮件oa单号：')
-package = mail_down(oa=oa_num)
-download = r'd:/1.zip'
-downfile = package.download_pack(download)
 
-if md5sum(downfile) == package.Md5:
-	os.chdir(os.path.dirname(downfile))
-	unzip(zipfile=downfile, path='./package')

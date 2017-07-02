@@ -4,22 +4,19 @@ from contextlib import closing
 import progressbar
 import requests
 from urllib import parse
-import json
 import re
 import os
 
 
 class mail_down:
+	def __init__(self, user, pswd, oa, tag=False):
 
-	def __init__(self, oa, tag=True):
-		with open('./config.json') as f:
-			conf = json.loads(f.read())
-		self.__username = conf['email']['name']
-		self.__passwd = conf['email']['password']
+		self.__username = user
+		self.__passwd = pswd
 		self.mail = POP3('mail.7road.com')
 		self.mail.user(self.__username)
 		self.mail.pass_(self.__passwd)
-		self.__tag = tag
+		self.__tag = tag #True 表示匹配国内的邮件，反之则是海外的。
 		self.__oa = oa
 		self.Md5 = None
 

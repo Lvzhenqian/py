@@ -1,5 +1,6 @@
 import paramiko
 from scp import SCPClient
+import os
 
 class SSHclient:
 	def __init__(self, ip, port, usrname, passwd):
@@ -19,3 +20,10 @@ class SSHclient:
 
 	def __del__(self):
 		self.ssh.close()
+
+
+
+def PushPackage(package,path,**socket):
+	sc = SSHclient(ip=socket['ip'],port=socket['port'],usrname=socket['username'],passwd=socket['passwd'])
+	sc.run('rm -rf {}'.format(os.path.join(path,package)))
+	sc.push(package,path)
