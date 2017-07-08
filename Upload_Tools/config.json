@@ -1,6 +1,6 @@
 {
   "name":"lv",
-  "password":"abcde",
+  "password":"angelo_5566!@",
   "agents":{
     "guoneiddt":{
       "title":"国内",
@@ -28,10 +28,10 @@
     "gangtai":{
       "title":"港台",
       "ip":"43.230.88.147",
-      "port":16333,
-      "user":"root",
-      "path":"/ddt/xtools",
-      "passwd":"abc"},
+      "port":26333,
+      "user":"7RoAdmin",
+      "path":"/data/ddt/xtools/gangtai",
+      "passwd":"nfnQY7RoaD@lktWzz7@Q"},
     "yuen":{
       "title":"越南",
       "ip":"43.230.88.131",

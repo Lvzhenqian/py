@@ -5,7 +5,10 @@ import os
 def unzip(zipfile, path, encoding='gbk'):
 	with ZipFile(zipfile, 'r') as myzip:
 		for name in myzip.namelist():
-			filename = name.encode('cp437').decode(encoding)
+			try:
+				filename = name.encode('cp437').decode(encoding)
+			except UnicodeEncodeError:
+				filename = name
 			pathname = os.path.join(path, os.path.dirname(filename))
 			if not os.path.exists(pathname) and pathname != "":
 				os.makedirs(pathname)
