@@ -1,10 +1,5 @@
-import time
-import progressbar
+import paramiko
 
-bar = progressbar.ProgressBar(widgets=[
-    ' [', progressbar.Timer(), '] ',
-    progressbar.Bar(),
-    ' (', progressbar.ETA(), ') ',
-])
-for i in bar(range(200)):
-    time.sleep(0.1)
+with paramiko.SSHClient() as ssh:
+	ssh.connect(('192.168.0.12',22))
+	stdin,stdout,stderr = ssh.exec_command('ls /tmp')
