@@ -8,10 +8,10 @@ class QYclient:
 	"""
 	类变量，用于在所有实例都可以使用这个账号与密码
 	"""
-	__sq_login_user = 'gdddt'
-	__sq_login_pwd = 'QY7RoaD@lktWzz7@Q'
-	__ddt_login_user = 'gdddt1'
-	__ddt_login_pwd = '7roadBT@9GMeyDia'
+	__sq_login_user = ''
+	__sq_login_pwd = ''
+	__ddt_login_user = ''
+	__ddt_login_pwd = ''
 
 	def __init__(self, where=False):
 		"""
