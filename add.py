@@ -1,36 +1,55 @@
-from urllib import request, parse
-from http import cookiejar
+import json
+import re
+import sys
+import configparser
+import time
 from collections import namedtuple
-import re, json, sys
+from http import cookiejar
+from urllib import request, parse
 
 
+def configure(cls):
+	def warp(*args, **kwargs):
+		try:
+			print('加载登陆配置文件......')
+			cfg = configparser.ConfigParser()
+			cfg.read('./cfg.ini')
+			cls.sq_login_user = cfg['DEFAULT'].get('SQ_loginuser', '')
+			cls.sq_login_pwd = cfg['DEFAULT'].get('SQ_passwd', '')
+			cls.ddt_login_user = cfg['DEFAULT'].get('DDT_loginuser', '')
+			cls.ddt_login_pwd = cfg['DEFAULT'].get('DDT_passwd', '')
+			cls.del_flag = cfg['DEFAULT'].get('del_flag', '')
+		except Exception as e:
+			sys.exit()
+		return cls(*args, **kwargs)
+	
+	return warp
+
+
+@configure
 class QYclient:
 	"""
 	类变量，用于在所有实例都可以使用这个账号与密码
 	"""
-	__sq_login_user = ''
-	__sq_login_pwd = ''
-	__ddt_login_user = ''
-	__ddt_login_pwd = ''
-
-	def __init__(self, where=False):
+	
+	def __init__(self, which=False):
 		"""
 		构造函数，每当实例化时，增加一些属性与生成一个opener()
 		"""
 		self.__login_request = 'http://www.qycn.com/ajax.request.php?act=26'
 		self.__image_url = 'http://www.qycn.com/yzcode.php?name=yz_login&num='
 		self.__manage = 'http://dns.qycn.com/index.php'
-		self.__configure = self.__config(where)
+		self.__configure = self.__config(which)
 		self.__opener = self.__login_web()
-
-	def __config(self, where):
+	
+	def __config(self, which):
 		return {'shenquol.com': 18108, 'ddshenqu.cn': 9794, 'aeonsaga.com': 11283, '7road.net': 7106,
-		        'login_user': self.__sq_login_user,
-		        'login_pwd': self.__sq_login_pwd} if where else {'baiduddt.cn': 3768,
-		                                                         'ddt1.cn': 12460,
-		                                                         'login_user': self.__ddt_login_user,
-		                                                         'login_pwd': self.__ddt_login_pwd}
-
+				'login_user': self.sq_login_user,
+				'login_pwd': self.sq_login_pwd} if which else {'baiduddt.cn': 3768,
+															   'ddt1.cn': 12460,
+															   'login_user': self.ddt_login_user,
+															   'login_pwd': self.ddt_login_pwd}
+	
 	def __read_file(self, fd) -> iter:
 		"""
 		处理domain.txt，解析出所需要的格
@@ -52,20 +71,20 @@ class QYclient:
 					tup.append([dic(x, tell, uni) for x in namelist])
 					namelist.clear()
 		return (j for n in range(len(tup)) for j in tup[n])
-
+	
 	def __login_web(self) -> request.build_opener:
 		"""
 		登陆函数，手动输入验证码。
 		:return: 返回一个处理函数，opener() 用于打开这个站点的所有链接。
 		"""
-
+		
 		header = {
 			'Content-Type': 'application/x-www-form-urlencoded',
 			'Accept': 'application/json, text/javascript, */*',
 			'Accept-Language': 'zh-CN,zh;q=0.8,en;q=0.6',
 			'Host': 'www.qycn.com',
 			'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
-			              'Chrome/56.0.2924.76 Safari/537.36',
+						  'Chrome/56.0.2924.76 Safari/537.36',
 			'X-Requested-With': 'XMLHttpRequest',
 			'Referer': 'http://www.qycn.com/user.php?action=login&goto=http://www.qycn.com/synlogin.php?action=dns',
 			'Origin': 'http://www.qycn.com'
@@ -105,14 +124,20 @@ class QYclient:
 			return opener.open
 		else:
 			sys.exit()
-
+	
 	def checker(self, dm: str, address='') -> list:
 		"""
 		查询函数，用来查询域名或者IP地址的解析记录
+		:param operator: 运营商
 		:param dm: 传入域名字符串，可以为空
 		:param address: 传入IP地址字符串，可以为空
 		:return: 返回namedtuple 列表对象。
 		"""
+		oper = {'中国联通': 2, '全部线路': 10, '中国电信': 1, '全部删除': ''}
+		try:
+			mt = int(self.del_flag) if self.del_flag.isdigit() else oper[self.del_flag]
+		except Exception as e:
+			mt = ''
 		if dm:
 			nt = dm.rsplit('.', 2)
 			first, end = nt[0], '.'.join(nt[-2:])
@@ -121,19 +146,20 @@ class QYclient:
 			first = ''
 			end = input('请输入将要在那个域名后缀中查询IP地址：')
 			rex = r'<.*name_(\w+)">(.*)<.*?>\s*<.*?>(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})<.*?>\s*<.*?>(\w{4})'
-		data = {'myzone': first, 'myaddress': address, 'mytype': '', 'mypriority': '', 'page_size': '', 'Submit': '查询'}
+		data = {'myzone': first, 'myaddress': address, 'mytype': mt,
+				'mypriority': '', 'page_size': '', 'Submit': '查询'}
 		domain = 'http://dns.qycn.com/index.php?tp=domrs&domid=%d' % (self.__configure[end])
 		querystring = parse.urlencode(data)
 		req = request.Request(url=domain, data=querystring.encode('ascii'))
 		resp = self.__opener(req).read()
-
+		
 		cmx = re.compile(rex)
 		find = cmx.findall(resp.decode())
 		if not find:
 			return []
 		ret = namedtuple('checker', ['id', 'domain', 'address', 'operator'])
 		return [ret(*x) for x in find]
-
+	
 	def Add_to_list(self, *, name, address, operator) -> str:
 		"""
 		增加函数，功能是把域名增加到解析记录里。
@@ -155,7 +181,7 @@ class QYclient:
 		o = re.compile(r'showinfo\(\'(\S+)\',')
 		status = o.findall(resp.decode())
 		return status.pop() if status else False
-
+	
 	def Delete_domain(self, *, name, domain_id) -> str:
 		"""
 		删除域名函数
@@ -171,10 +197,53 @@ class QYclient:
 		resp = self.__opener(reque).read()
 		status = json.loads(resp.decode())
 		return status['message']
-
+	
+	def __make_del_list(self, domfile):
+		ret = {}
+		with open(domfile, mode='rt') as fd:
+			total, lost = 0, []
+			for line in fd:
+				name = line.strip()
+				value = [x.id for x in self.checker(name)]
+				if len(value) > 0:
+					print('添加：{}域名到删除列表，数量{}'.format(name, len(value)))
+				else:
+					lost.append(name)
+				total += len(value)
+				end = '.'.join(name.rsplit('.', 2)[-2:])
+				if end not in ret.keys() or not ret:
+					ret[end] = value
+				else:
+					ret[end].extend(value)
+				time.sleep(0.2)
+			print('总删除数量：{}'.format(total))
+			if lost:
+				print('未查询到数量：{}'.format(len(lost)))
+				print('未查询到域名：{}'.format(lost))
+				time.sleep(2)
+		ask = input('是否确定要删除这些域名？[yes/no]')
+		if ask.lower() == 'no' or not ask:
+			return
+		return ret
+	
+	def del_all(self, domfile):
+		total = 0
+		dlist = self.__make_del_list(domfile)
+		if not dlist:
+			return
+		for k, v in dlist.items():
+			p = dict(tp='domrs', ac='ajaxs_del_a', redtp='a', redid=','.join(v), domid=self.__configure[k])
+			query = parse.urlencode(p)
+			reque = request.Request(self.__manage, data=query.encode('ascii'))
+			resp = self.__opener(reque).read()
+			status = json.loads(resp.decode())
+			total += len(v)
+			print('{}域名删除了{}条，删除结果：{}'.format(k, len(v), status['message']))
+		return '删除总数：{}'.format(total)
+	
 	def Outprint(self, **kwargs):
 		return '[{count:>3}]执行结果：{stat}  域名：{name} 解析到：{address}--{operator}'.format(**kwargs)
-
+	
 	def run(self):
 		"""
 		自动执行函数，用于自动增加domain.txt文件里的域名
@@ -192,17 +261,17 @@ class QYclient:
 				if telstat:
 					successful += 1
 					print(self.Outprint(count=successful, stat=telstat, name=nametp.name, address=nametp.tellcom,
-					                    operator='全部线路'))
+										operator='全部线路'))
 			else:
 				fail += 1
-
+			
 			unichekc = self.checker(nametp.name, nametp.unicom)
 			if not unichekc:
 				unistat = self.Add_to_list(name=nametp.name, address=nametp.unicom, operator='中国联通')
 				if unistat:
 					successful += 1
 					print(self.Outprint(count=successful, stat=unistat, name=nametp.name, address=nametp.unicom,
-					                    operator='中国联通'))
+										operator='中国联通'))
 			else:
 				fail += 1
 		return '成功：{}  失败：{} 总数：{}'.format(successful, fail, successful + fail)
@@ -210,13 +279,14 @@ class QYclient:
 
 if __name__ == '__main__':
 	print('开始登陆群英解析站点')
-
-
+	
+	
 	def where():
 		"""
 		因账号不同，所以增加了选择函数。
 		:return: 返回一个QYclient类的实例。
 		"""
+		
 		while True:
 			print(
 				'''
@@ -229,17 +299,17 @@ if __name__ == '__main__':
 				if c == 3:
 					return False
 				elif c == 1:
-					return QYclient(where=True)
-				else:
+					return QYclient(which=True)
+				elif c == 2:
 					return QYclient()
 			except ValueError:
 				print('输出错误，请输入对应的数字。')
 				continue
-
-
+	
+	
 	client = where()
 	while client:
-		new = input("请输入将要执行的操作[run|del|add|check|quit]：")
+		new = input("请输入将要执行的操作[run|drun|del|add|check|quit]：")
 		if new.lower() == 'quit':
 			break
 		if new.lower() == 'run':
@@ -282,3 +352,5 @@ if __name__ == '__main__':
 					print('删除{}: {}'.format(name, stat))
 			else:
 				print('没有找到 {} 解析记录'.format(name))
+		if new.lower() == 'drun':
+			print(client.del_all(domfile='./delist.txt'))
