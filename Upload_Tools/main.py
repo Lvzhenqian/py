@@ -13,7 +13,7 @@ def PushPackage(Spath, Upath, **socket):
         pck = os.path.realpath(os.path.join(pk, 'dandantang.zip'))
         ps = Upath + '/' + pk
         sc.run('rm -rf {}'.format(ps + '/' + 'dandantang.zip'))
-        sc.push(pck, ps + '/' + 'dandantang.zip')
+        sc.put(pck, ps + '/' + 'dandantang.zip')
 
 
 try:
