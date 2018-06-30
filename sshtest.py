@@ -21,7 +21,7 @@ def get_sql_log(host,port,user,password,cmd):
             #print rl
             if len(rl)>0:
                 recv=channel.recv(1024)
-                print(recv)
+                print(recv.decode('utf8'),end='')
                 #print recv
                 #f.seek(2)
                 # f.write(str(recv))
@@ -34,4 +34,4 @@ def get_sql_log(host,port,user,password,cmd):
             s.close()
             exit(0)
 
-get_sql_log(host='192.168.8.231',port=22,user='root',password='hd8832508',cmd='ping -c4 www.baidu.com')
+get_sql_log(host='192.168.19.21',port=22,user='root',password='hd8832508',cmd='ping -c4 www.baidu.com')

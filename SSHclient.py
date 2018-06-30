@@ -1,29 +1,82 @@
-import paramiko
-import socket
 import os
+import select
 from stat import S_ISDIR
+import sys
+
+import paramiko
+import logging
+import progressbar
+from colorlog import ColoredFormatter
+
+LOGFORMAT = ColoredFormatter(
+	fmt='[%(asctime)s]:[%(funcName)s]:%(log_color)s%(lineno)d:%(reset)s%(log_color)s'         
+		'%(levelname)s%(reset)s:%(message_log_color)s%(message)s',
+	log_colors={
+		'DEBUG': 'cyan',
+		'INFO': 'green',
+		'ERROR': 'red',
+		'WARNING': 'yellow',
+		'CRITICAL': 'red,bg_white',
+	},secondary_log_colors={
+		'message':{
+			'ERROR':'red',
+			'CRITICAL':'red',
+			'DEBUG': 'white',
+			'INFO': 'white',
+			'WARNING': 'yellow'
+		}
+	})
+
+class Progress:
+	def __init__(self,address, name):
+		self.bar = progressbar.ProgressBar()
+		self.bar.widgets=[
+			address,":",name," ",progressbar.Percentage(),
+			progressbar.Bar(marker="█",left='|',right="|"),
+			progressbar.ETA()," ",progressbar.FileTransferSpeed()
+		]
+		self.bar.start()
+
+	def update(self,pos,total):
+		self.bar.max_value = total
+		self.bar.update(pos)
+
+	def __del__(self):
+		self.bar.finish()
+
 
 
 class SSH:
 	def __init__(self, host: str, port: int, user: str, passwd: str, pKey=None, keypass=None):
-		self.client = paramiko.Transport((host, port))
+		self.address = (host,port)
+		self.client = paramiko.Transport(self.address)
 		if pKey:
 			key = paramiko.RSAKey.from_private_key_file(pKey, password=keypass)
 			self.client.connect(username=user, pkey=key)
 		else:
 			self.client.connect(username=user, password=passwd)
-		# self.client.start_client()
 		self.sftp = paramiko.SFTPClient.from_transport(self.client)
+		self.loger = logging.getLogger("SSH")
+		self.loger.setLevel(logging.DEBUG)
+		self.loger.propagate = False
+		console = logging.StreamHandler(stream=sys.stdout)
+		console.setLevel(logging.DEBUG)
+		console.setFormatter(LOGFORMAT)
+		self.loger.addHandler(console)
 
 	def runner(self, command: str):
 		ssh = paramiko.SSHClient()
 		ssh._transport = self.client
-		stdin, stdout, stderr = ssh.exec_command(command,get_pty=True,bufsize=0)
+		stdin, stdout, stderr = ssh.exec_command(command, get_pty=True, bufsize=0)
 		while True:
 			try:
 				out = stdout.readline()
 				err = stderr.readline()
-				print(out.strip('\n'))
+				linebreak = b'\r\n' if b'\r' in out else b'\n'
+				st = out.split(linebreak)
+				for s in st:
+					if s:
+						self.loger.info(s.decode('utf8'))
 			except KeyboardInterrupt:
 				break
 			except Exception as e:
@@ -33,13 +86,30 @@ class SSH:
 			if err:
 				break
 
-	# def other_run(self,command):
-	# 	ssh = paramiko.SSHClient()
-	# 	ssh._transport = self.client
-	# 	channel = self.client.open_session()
+	def other_run(self, command):
+		channel = self.client.open_session()
+		channel.get_pty()
+		# self.loger.debug(command)
+		# self.loger.warning("aaaa")
+		channel.exec_command(command)
+		while not channel.exit_status_ready():
+			try:
+				rlist, wlist, xlist = select.select([channel], [], [], 1)
+				if len(rlist) > 0:
+					recv = channel.recv(65533)
+					linebreak = b'\r\n' if b'\r' in recv else b'\n'
+					lines = recv.split(linebreak)
+					for s in lines:
+						if s:
+							self.loger.info(s.decode('utf8'))
+			except KeyboardInterrupt:
+				channel.send("\x03")  # 发送 ctrl+c
+				channel.close()
+				self.client.close()
 
 	def put(self, file: str, path: str):
-		self.sftp.put(file, path)
+		bar = Progress(address=self.address[0],name=os.path.basename(file))
+		self.sftp.put(file, path,callback=bar.update)
 
 	def put_all(self, localpath: str, remotepath: str):
 		os.chdir(os.path.split(localpath)[0])
@@ -53,7 +123,8 @@ class SSH:
 				self.put(os.path.join(walker[0], file), os.path.join(remotepath, walker[0], file))
 
 	def get(self, path: str, file: str):
-		self.sftp.get(path, file)
+		bar = Progress(address=self.address[0], name=os.path.basename(file))
+		self.sftp.get(path, file,callback=bar.update)
 
 	def sftp_walk(self, remotepath):
 		path = remotepath
@@ -97,5 +168,6 @@ class SSH:
 
 
 if __name__ == '__main__':
-	with SSH(host='192.168.8.231', port=22, user='root', passwd='hd8832508') as ssh:
-		ssh.runner("ping -c3 www.baidu.com")
+	with SSH(host='192.168.19.21', port=22, user='root', passwd='hd8832508') as ssh:
+		ssh.other_run("ping -c3 www.baidu.com")
+        # ssh.runner('w')
