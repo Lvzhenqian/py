@@ -1,37 +1,59 @@
-import select
 import paramiko
+import sys
+import socket
+import select
+import termios
+import tty
+from paramiko.py3compat import u
 
-def get_sql_log(host,port,user,password,cmd):
-    # commond='cd crm-app/;./tailall.sh | grep %s'%key_words
-    s = paramiko.SSHClient()
-    s.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    s.connect(host,port,user,password)
-    transport=s.get_transport()
-    channel = transport.open_session()
-    channel.get_pty()
-    channel.exec_command(cmd)
-    # print 'command %s'%commond
-   # print '%s' % (str(host))
-   #  f=open(out_put_filename,'a+')
+tran = paramiko.Transport(('192.168.19.21', 22,))
+tran.start_client()
+# tran.connect(username='root', password='hd8832508')
+tran.auth_password(username='root', password='hd8832508')
 
-   # f.write(str(dir(s)))
-    while not channel.exit_status_ready():
-        try:
-            rl,wl,xl=select.select([channel],[],[],1)
-            #print rl
-            if len(rl)>0:
-                recv=channel.recv(1024)
-                print(recv.decode('utf8'),end='')
-                #print recv
-                #f.seek(2)
-                # f.write(str(recv))
-                # f.flush()
+# 打开一个通道
+chan = tran.open_session()
+# 获取一个终端
+chan.get_pty()
+# 激活器
+chan.invoke_shell()
 
-        except KeyboardInterrupt:
-            # print("Caught control-C")
-            channel.send("\x03")#发送 ctrl+c
-            channel.close()
-            s.close()
-            exit(0)
+# 获取原tty属性
+oldtty = termios.tcgetattr(sys.stdin)
+try:
+	# 为tty设置新属性
+	# 默认当前tty设备属性：
+	#   输入一行回车，执行
+	#   CTRL+C 进程退出，遇到特殊字符，特殊处理。
 
-get_sql_log(host='192.168.19.21',port=22,user='root',password='hd8832508',cmd='ping -c4 www.baidu.com')
+	# 这是为原始模式，不认识所有特殊符号
+	# 放置特殊字符应用在当前终端，如此设置，将所有的用户输入均发送到远程服务器
+	tty.setraw(sys.stdin.fileno())
+	chan.settimeout(0.0)
+
+	while True:
+		# 监视 用户输入 和 远程服务器返回数据（socket）
+		# 阻塞，直到句柄可读
+		r, w, e = select.select([chan, sys.stdin], [], [], 1)
+		if chan in r:
+			try:
+				x = u(chan.recv(1024))
+				if len(x) == 0:
+					print('\r\n*** EOF\r\n')
+					break
+				sys.stdout.write(x)
+				sys.stdout.flush()
+			except socket.timeout:
+				pass
+		if sys.stdin in r:
+			x = sys.stdin.read(1)
+			if len(x) == 0:
+				break
+			chan.send(x)
+
+finally:
+	# 重新设置终端属性
+	termios.tcsetattr(sys.stdin, termios.TCSADRAIN, oldtty)
+
+chan.close()
+tran.close()

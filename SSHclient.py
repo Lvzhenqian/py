@@ -2,6 +2,9 @@ import os
 import select
 from stat import S_ISDIR
 import sys
+import socket
+import termios
+import tty
 
 import paramiko
 import logging
@@ -9,7 +12,7 @@ import progressbar
 from colorlog import ColoredFormatter
 
 LOGFORMAT = ColoredFormatter(
-	fmt='[%(asctime)s]:[%(funcName)s]:%(log_color)s%(lineno)d:%(reset)s%(log_color)s'         
+	fmt='[%(asctime)s]:[%(funcName)s]:%(log_color)s%(lineno)d:%(reset)s%(log_color)s'
 		'%(levelname)s%(reset)s:%(message_log_color)s%(message)s',
 	log_colors={
 		'DEBUG': 'cyan',
@@ -17,10 +20,10 @@ LOGFORMAT = ColoredFormatter(
 		'ERROR': 'red',
 		'WARNING': 'yellow',
 		'CRITICAL': 'red,bg_white',
-	},secondary_log_colors={
-		'message':{
-			'ERROR':'red',
-			'CRITICAL':'red',
+	}, secondary_log_colors={
+		'message': {
+			'ERROR': 'red',
+			'CRITICAL': 'red',
 			'DEBUG': 'white',
 			'INFO': 'white',
 			'WARNING': 'yellow'
@@ -28,16 +31,16 @@ LOGFORMAT = ColoredFormatter(
 	})
 
 class Progress:
-	def __init__(self,address, name):
+	def __init__(self, address, name):
 		self.bar = progressbar.ProgressBar()
-		self.bar.widgets=[
-			address,":",name," ",progressbar.Percentage(),
-			progressbar.Bar(marker="█",left='|',right="|"),
-			progressbar.ETA()," ",progressbar.FileTransferSpeed()
+		self.bar.widgets = [
+			address, ":", name, " ", progressbar.Percentage(),
+			progressbar.Bar(marker="█", left='|', right="|"),
+			progressbar.ETA(), " ", progressbar.FileTransferSpeed()
 		]
 		self.bar.start()
 
-	def update(self,pos,total):
+	def update(self, pos, total):
 		self.bar.max_value = total
 		self.bar.update(pos)
 
@@ -45,17 +48,9 @@ class Progress:
 		self.bar.finish()
 
 
-
 class SSH:
-	def __init__(self, host: str, port: int, user: str, passwd: str, pKey=None, keypass=None):
-		self.address = (host,port)
-		self.client = paramiko.Transport(self.address)
-		if pKey:
-			key = paramiko.RSAKey.from_private_key_file(pKey, password=keypass)
-			self.client.connect(username=user, pkey=key)
-		else:
-			self.client.connect(username=user, password=passwd)
-		self.sftp = paramiko.SFTPClient.from_transport(self.client)
+	def __init__(self, host: str, port: int, user: str, passwd: str, pKey=None, keypass=None, invoke=False):
+		# loger
 		self.loger = logging.getLogger("SSH")
 		self.loger.setLevel(logging.DEBUG)
 		self.loger.propagate = False
@@ -63,6 +58,20 @@ class SSH:
 		console.setLevel(logging.DEBUG)
 		console.setFormatter(LOGFORMAT)
 		self.loger.addHandler(console)
+		# client
+		self.address = (host, port)
+		self.client = paramiko.Transport(self.address)
+		if invoke:
+			self.client.start_client()
+			self.client.auth_password(username=user, password=passwd)
+		elif pKey:
+			key = paramiko.RSAKey.from_private_key_file(pKey, password=keypass)
+			self.client.connect(username=user, pkey=key)
+			self.sftp = paramiko.SFTPClient.from_transport(self.client)
+		else:
+			self.client.connect(username=user, password=passwd)
+			self.sftp = paramiko.SFTPClient.from_transport(self.client)
+
 
 	def runner(self, command: str):
 		ssh = paramiko.SSHClient()
@@ -108,8 +117,8 @@ class SSH:
 				self.client.close()
 
 	def put(self, file: str, path: str):
-		bar = Progress(address=self.address[0],name=os.path.basename(file))
-		self.sftp.put(file, path,callback=bar.update)
+		bar = Progress(address=self.address[0], name=os.path.basename(file))
+		self.sftp.put(file, path, callback=bar.update)
 
 	def put_all(self, localpath: str, remotepath: str):
 		os.chdir(os.path.split(localpath)[0])
@@ -124,7 +133,7 @@ class SSH:
 
 	def get(self, path: str, file: str):
 		bar = Progress(address=self.address[0], name=os.path.basename(file))
-		self.sftp.get(path, file,callback=bar.update)
+		self.sftp.get(path, file, callback=bar.update)
 
 	def sftp_walk(self, remotepath):
 		path = remotepath
@@ -157,6 +166,37 @@ class SSH:
 			for file in walker[2]:
 				self.get(os.path.join(walker[0], file), os.path.join(localpath, walker[0], file))
 
+	def start(self):
+		channel = self.client.open_session()
+		channel.get_pty()
+		channel.invoke_shell()
+		oldtty = termios.tcgetattr(sys.stdin)
+		try:
+			tty.setraw(sys.stdin)
+			channel.settimeout(0)
+			while True:
+				r, w, e = select.select([channel, sys.stdin], [], [], 1)
+
+				if channel in r:
+					try:
+						x = channel.recv(1024)
+						if len(x) == 0:
+							print("\r退出登录\r")
+							break
+						# self.loger.debug(x)
+						sys.stdout.write(x.decode())
+						sys.stdout.flush()
+					except socket.timeout:
+						pass
+
+				if sys.stdin in r:
+					i = sys.stdin.read(1)
+					if len(i) == 0:
+						break
+					channel.send(i)
+		finally:
+			termios.tcsetattr(sys.stdin, termios.TCSADRAIN, oldtty)
+
 	def __enter__(self):
 		return self
 
@@ -168,6 +208,7 @@ class SSH:
 
 
 if __name__ == '__main__':
-	with SSH(host='192.168.19.21', port=22, user='root', passwd='hd8832508') as ssh:
-		ssh.other_run("ping -c3 www.baidu.com")
-        # ssh.runner('w')
+	with SSH(host='192.168.19.21', port=22, user='root', passwd='hd8832508',invoke=True) as ssh:
+		# ssh.other_run("ping -c3 www.baidu.com")
+		ssh.start()
+		# ssh.runner('w')
